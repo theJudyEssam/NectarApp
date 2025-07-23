@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nectar.ui.components.ProductViewItem
+import com.example.nectar.ui.components.SearchBar
 import com.example.nectar.ui.theme.GreenN
 import com.example.nectar.ui.theme.GreyN
 import com.example.nectar.ui.theme.NectarTheme
@@ -70,6 +71,9 @@ contentPadding: PaddingValues = PaddingValues()
 
 
 
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
@@ -79,25 +83,7 @@ fun SearchTopBar(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            TextField(
-                value = query,
-                onValueChange = onQueryChange,
-                placeholder = { Text("Search...") },
-                singleLine = true,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .fillMaxWidth()
-                    .background(
-                        color = Color(0xFFF2F3F2),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .size(51.57.dp)
-                ,
-                shape = RoundedCornerShape(0.dp),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = null)
-                }
-            )
+            SearchBar()
         },
         actions =
             {

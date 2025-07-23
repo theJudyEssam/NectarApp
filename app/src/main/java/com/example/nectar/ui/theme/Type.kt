@@ -64,6 +64,37 @@ val Typography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         lineHeight = 18.sp
+    ),
+
+    displayLarge = TextStyle(
+        fontFamily = Gilroy,
+        fontWeight = FontWeight.W600,
+        fontSize = 48.sp,
+        lineHeight = 30.sp,
+        letterSpacing = 0.sp,
+        textAlign = TextAlign.Center
+    ),
+
+
+    displaySmall = TextStyle(
+        fontFamily = Gilroy,
+        fontWeight = FontWeight.Medium,
+        lineHeight = 15.sp,
+        letterSpacing = 0.sp,
+        fontSize = 16.sp,
+        textAlign = TextAlign.Center
+    ),
+    /*font-family: Gilroy;
+font-weight: 600;
+font-size: 24px;
+leading-trim: NONE;
+line-height: 100%;
+letter-spacing: 0%;
+*/
+    displayMedium = TextStyle(
+        fontFamily = Gilroy,
+        fontWeight = FontWeight.W600,
+        fontSize = 24.sp,
     )
 
 )

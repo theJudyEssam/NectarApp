@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun NumericCounter(
+    modifier: Modifier = Modifier,
     value: Int,
     onValueChange: (Int) -> Unit,
     min: Int = 0,

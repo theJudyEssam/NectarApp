@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +31,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductDetailsSections
+import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductNameSection
+import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductNutritionSection
+import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductPriceSection
+import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductReviewSection
 import com.example.nectar.ui.theme.Gilroy
 import com.example.nectar.ui.theme.NectarTheme
 
@@ -52,11 +58,43 @@ fun ProductBody(
     productDescription: String = "Apples are nutritious. Apples may be good for weight loss. apples may be good for your heart. As part of a healtful and varied diet.",
     productReview:Int = 4,
     productNutrition: Map<String, String> = emptyMap(),
-    productPrice: Float = 0.0f
+    productPrice: Float = 0.0f,
+    onAddCart: () -> Unit = {}
 ){
 
-    var details_visible by remember { mutableStateOf(false) }
+    Column(){
+        ProductInfo(
+            productName,
+            productPrice,
+            productReview,
+            productURL,
+            productDetails,
+            productNutrition,
+            productDescription
+        )
 
+        Button(
+            onClick = {}
+        ){
+
+        }
+    }
+
+
+
+}
+
+@Composable
+fun ProductInfo(
+    productName: String,
+    productPrice: Float,
+    productReview: Int,
+    productURL: String,
+    productDetails: String,
+    productNutrition: Map<String, String>,
+    productDescription: String,
+    modifier: Modifier = Modifier
+){
 
     LazyColumn {
         item{
@@ -68,89 +106,28 @@ fun ProductBody(
                     .height(371.44.dp)
             )
         }
-
-
-
         item{
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = modifier.padding(16.dp)
-            ) {
-
-                Column(
-                    modifier = modifier.weight(1f)
-                ){
-                    Text(productName,
-                        style = TextStyle(
-                            fontFamily = Gilroy,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 24.sp, 
-                            lineHeight = 18.sp,
-                            textAlign = TextAlign.Center
-                        ))
-                    Text(productDetails,
-                        style = MaterialTheme.typography.labelSmall)
-                }
-
-                IconButton(
-                    onClick = {} // no favourites so no implementation
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null
-                    )
-                }
-
-            }
+            ProductNameSection(productName = productName, productDetails = productDetails)
         }
 
         item{
-
-            Column(
-                modifier = modifier.padding(16.dp)
-            ){
-
-                Row(){
-                    Text(
-                        "Product Details",
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = modifier.weight(1f)
-                    )
-
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Arrow Down",
-                        modifier = modifier.clickable(
-                            enabled = true, onClick = {
-                                details_visible = !details_visible
-                                
-                            }
-                        )
-                    )
-                }
-
-                AnimatedVisibility(
-                    details_visible == true
-                ) {
-                    Text(
-                        productDescription,
-                        style = MaterialTheme.typography.labelSmall,
-                        textAlign = TextAlign.Left
-                    )
-                }
-
-            }
-
-
+            ProductPriceSection(productPrice)
         }
+        item{ ProductDetailsSections(modifier,productDescription) }
 
         item{
-
+            ProductNutritionSection()
+        }
+        item{
+            ProductReviewSection(rating = productReview)
         }
     }
 
 
 }
+
+
+
 
 
 

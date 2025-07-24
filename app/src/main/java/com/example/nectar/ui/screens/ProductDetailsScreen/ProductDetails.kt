@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +40,7 @@ import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductNutrit
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductPriceSection
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductReviewSection
 import com.example.nectar.ui.theme.Gilroy
+import com.example.nectar.ui.theme.GreenN
 import com.example.nectar.ui.theme.NectarTheme
 
 
@@ -62,7 +66,9 @@ fun ProductBody(
     onAddCart: () -> Unit = {}
 ){
 
-    Column(){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
         ProductInfo(
             productName,
             productPrice,
@@ -74,9 +80,21 @@ fun ProductBody(
         )
 
         Button(
-            onClick = {}
+            onClick = {},
+            modifier = modifier
+                .width(353.dp)
+                .height(67.dp)
+                .padding(4.dp),
+            shape = RoundedCornerShape(19.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = GreenN // or any other Color
+            )
         ){
-
+            Text(
+                "Add to Basket",
+                style = MaterialTheme.typography.labelMedium,
+//              //  modifier = modifier.padding(16.dp)
+            )
         }
     }
 
@@ -127,6 +145,11 @@ fun ProductInfo(
 }
 
 
+
+@Composable
+fun ProductNavBar(){
+
+}
 
 
 

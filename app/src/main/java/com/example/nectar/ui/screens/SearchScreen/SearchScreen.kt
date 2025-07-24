@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -28,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nectar.ui.components.ProductViewItem
+import com.example.nectar.ui.components.SearchBar
 import com.example.nectar.ui.theme.GreenN
 import com.example.nectar.ui.theme.GreyN
 import com.example.nectar.ui.theme.NectarTheme
@@ -67,6 +70,10 @@ contentPadding: PaddingValues = PaddingValues()
 }
 
 
+
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
@@ -76,24 +83,7 @@ fun SearchTopBar(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            TextField(
-                value = query,
-                onValueChange = onQueryChange,
-                placeholder = { Text("Search...") },
-                singleLine = true,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .fillMaxWidth()
-                    .background(
-                        color = Color(0xFFF2F3F2),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                ,
-                shape = RoundedCornerShape(0.dp),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = null)
-                }
-            )
+            SearchBar()
         },
         actions =
             {

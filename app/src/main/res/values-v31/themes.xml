@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Nectar.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/green</item>
+        <item name="postSplashScreenTheme">@style/Theme.Nectar</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/nectar_logo</item>
+    </style>
+</resources>

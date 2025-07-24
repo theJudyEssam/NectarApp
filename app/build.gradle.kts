@@ -74,4 +74,14 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    // Splash Screen Dependencies
+    implementation("androidx.core:core-splashscreen:1.0.0")
+
+    // for Paging
+    implementation("androidx.compose.foundation:foundation:1.6.0")
+
+
+
+
 }

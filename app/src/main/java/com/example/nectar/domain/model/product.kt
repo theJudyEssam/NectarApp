@@ -1,13 +1,8 @@
-package com.example.nectar.data.model
+package com.example.nectar.domain.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.example.nectar.domain.model.product
+import com.example.nectar.data.model.ProductItem
 
-
-@Entity(tableName = "Products")
-data class ProductItem (
-    @PrimaryKey (autoGenerate = true)
+class product(
     var Id: Int = 0,
     var productName: String,
     var productWeight: String,
@@ -19,9 +14,9 @@ data class ProductItem (
     var productRating: Int
 )
 
-fun ProductItem.toDomain(): product {
-    return product(
-        Id = Id ,
+fun product.toEntity(): ProductItem {
+    return ProductItem(
+        Id = Id,
         productName = productName,
         productWeight = productWeight,
         productImg = productImg,

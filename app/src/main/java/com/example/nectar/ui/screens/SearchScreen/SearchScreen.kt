@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -25,10 +26,14 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.nectar.domain.model.product
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.components.SearchBar
 import com.example.nectar.ui.theme.GreenN
@@ -38,22 +43,26 @@ import com.example.nectar.ui.theme.WhiteN
 
 
 @Composable
-fun SearchScreen(){
+fun SearchScreen(
+    viewModel: SearchViewModel = hiltViewModel()
+){
 
+   val products by viewModel.products.collectAsState()
     Scaffold(
         topBar = { SearchTopBar() }
     )
     {
         innerPadding ->
-        SearchBody( modifier = Modifier.padding(8.dp),contentPadding = innerPadding)
+        SearchBody(products, modifier = Modifier.padding(8.dp),contentPadding = innerPadding)
     }
 }
 
 
 @Composable
 fun SearchBody(
-modifier:Modifier = Modifier,
-contentPadding: PaddingValues = PaddingValues()
+    products:List<product> = emptyList<product>(),
+    modifier:Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues()
 ){
 
     LazyVerticalGrid(
@@ -63,8 +72,13 @@ contentPadding: PaddingValues = PaddingValues()
         verticalArrangement = Arrangement.spacedBy(12.dp), // 👈 space between rows
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(10){
-            ProductViewItem()
+        items(products){ product ->
+            ProductViewItem(
+                title = product.productName,
+                image = product.productImg,
+                details = product.productWeight,
+                price = product.productPrice
+            )
         }
     }
 }

@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
-    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27"
+    // REMOVE this line: id("kotlin-kapt")
 }
 
 android {
@@ -30,14 +31,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+    }
+
+    hilt {
+        enableAggregatingTask = false
     }
 }
 
@@ -63,12 +68,12 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // Room dependencies
-    implementation("androidx.room:room-runtime:2.7.2")
-    ksp("androidx.room:room-compiler:2.7.2")
-    implementation("androidx.room:room-ktx:2.7.2")
+    // Room dependencies - update to latest
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 
     implementation("io.coil-kt:coil-compose:2.7.0")
-
 
     // Hilt dependencies
     implementation(libs.hilt.android)
@@ -80,6 +85,7 @@ dependencies {
 
     // for Paging
     implementation("androidx.compose.foundation:foundation:1.6.0")
+
 
 
 

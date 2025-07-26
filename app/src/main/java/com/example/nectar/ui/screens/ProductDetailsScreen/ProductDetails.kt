@@ -46,9 +46,11 @@ import com.example.nectar.ui.theme.NectarTheme
 
 @Composable
 fun ProductDetailsScreen(
+    productId: Int = 0,
     modifier: Modifier = Modifier
 ){
 
+    // add logic here to get the product based on its id and all
     ProductBody()
 }
 

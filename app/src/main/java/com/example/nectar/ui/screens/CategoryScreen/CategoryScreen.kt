@@ -29,22 +29,27 @@ import com.example.nectar.ui.components.PhotoCard
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.theme.NectarTheme
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.navigation.NavController
 
 
 @Composable
 fun CategoryScreen(
-    categoryTitle: String
+    categoryTitle: String,
+    navController: NavController
 ){
     Scaffold(
         topBar = { CategoryNavBar(categoryTitle = categoryTitle) }
     ) { innerPadding ->
-        CategoryBody(modifier = Modifier.padding(horizontal = 8.dp),contentPadding = innerPadding)
+        CategoryBody(modifier = Modifier.padding(horizontal = 8.dp),
+            contentPadding = innerPadding,
+            navController = navController)
     }
 }
 
 
 @Composable
 fun CategoryBody(
+    navController: NavController,
     modifier:Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues()
 ){
@@ -57,7 +62,11 @@ fun CategoryBody(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(10){
-            ProductViewItem()
+            ProductViewItem(
+                modifier = modifier.clickable(
+                    onClick = {navController.navigate("product/${0}")}
+                )
+            )
         }
     }
 }
@@ -101,6 +110,5 @@ fun CategoryNavBar(
 @Composable
 fun CategoryPreview(){
     NectarTheme {
-        CategoryScreen("Category")
     }
 }

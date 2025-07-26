@@ -1,7 +1,9 @@
 package com.example.nectar.ui.screens.HomeScreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -26,10 +28,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.nectar.R
@@ -48,14 +53,18 @@ val imageUrls = listOf(
 
 @Composable
 fun HomeScreen(
-    modifier : Modifier = Modifier.padding(16.dp)
+    modifier : Modifier = Modifier.padding(16.dp),
+    navController: NavController
 ){
-        HomeBody(modifier = modifier.padding(16.dp))
+        HomeBody(
+            navController,
+            modifier = modifier.padding(16.dp))
 }
 
 @Composable
 
 fun HomeBody(
+    navController: NavController,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues()
 ){
@@ -65,9 +74,9 @@ fun HomeBody(
     ) {
         item {HomeScreenBar() }
         item { BannerSlider(imageUrls)}
-        item { HomeCategory() }
-        item { HomeCategory() }
-        item { GroceriesRow() }
+        item { HomeCategory(navController = navController, text = "Exclusive Offers") }
+        item { HomeCategory(navController = navController, text = "Best Selling") }
+        item { GroceriesRow(navController, title = "Groceries") }
     }
 
 
@@ -75,32 +84,34 @@ fun HomeBody(
 
 
 @Composable
-
-fun BannerSlider(
-    images: List<String>
-){
-
+fun BannerSlider(images: List<String>) {
     val pagerState = rememberPagerState(pageCount = { images.size })
-
 
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .padding(16.dp)
-            .clip(RoundedCornerShape(17.dp)),
-
+            .padding(horizontal = 16.dp)
     ) { page ->
         val imageUrl = images[page]
-        Image(
-            painter = rememberAsyncImagePainter(imageUrl),
-            contentDescription = "Slide $page",
-            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(17.dp))
-        )
-    }
 
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(15.dp))
+                .background(Color.LightGray) // fallback background in case image fails
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(imageUrl),
+                contentDescription = "Slide $page",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
 }
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,7 +122,7 @@ fun HomeScreenBar(
 ){
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp).padding(bottom = 8.dp)
             ) {
                 Image(
                     painter = painterResource(R.drawable.group__1_),
@@ -139,7 +150,6 @@ fun HomeScreenBar(
 @Composable
 fun HomeScreenPreview(){
     NectarTheme {
-        HomeScreen()
 //        GroceriesRow()
     }
 }

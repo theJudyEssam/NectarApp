@@ -1,6 +1,7 @@
 package com.example.nectar.ui.screens.MyCartScreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.nectar.ui.components.NumericCounter
 import com.example.nectar.ui.theme.GreenN
@@ -35,17 +37,21 @@ import com.example.nectar.ui.theme.GreenN
 
 // please god help please help
 @Composable
-fun CartsScreen(){
+fun CartsScreen(
+    navController: NavController
+){
     Scaffold(
         topBar = {CartNavBar()}
     ) {
-        innerPadding -> CartsBody(Modifier.padding(innerPadding), contentPadding = innerPadding)
+        innerPadding ->
+        CartsBody(navController, modifier = Modifier.padding(innerPadding), contentPadding = innerPadding)
     }
 }
 
 @Composable
 fun CartsBody(
-    modifier: Modifier = Modifier.padding(top =30.dp),
+    navController: NavController,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues()){
 
     Box(){
@@ -54,7 +60,11 @@ fun CartsBody(
         )
         {
             items(10){
-                CartItem()
+                CartItem(
+                    modifier = Modifier.clickable(
+                        onClick = { navController.navigate("product/${0}") }
+                    )
+                )
             }
         }
 
@@ -114,8 +124,8 @@ fun CartItem(
             painter = rememberAsyncImagePainter(productImg),
             contentDescription = null,
             modifier = modifier
-            .width(86.74077606201172.dp)
-            .height(86.74077606201172.dp)
+                .width(86.74077606201172.dp)
+                .height(86.74077606201172.dp)
         )
 
         Column(
@@ -184,5 +194,4 @@ fun CartItem(
 @Preview(showBackground = true)
 @Composable
 fun CartScreenPreview(){
-    CartsScreen()
 }

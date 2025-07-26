@@ -32,9 +32,11 @@ import androidx.compose.foundation.layout.statusBarsPadding
 
 
 @Composable
-fun CategoryScreen(){
+fun CategoryScreen(
+    categoryTitle: String
+){
     Scaffold(
-        topBar = { CategoryNavBar() }
+        topBar = { CategoryNavBar(categoryTitle = categoryTitle) }
     ) { innerPadding ->
         CategoryBody(modifier = Modifier.padding(horizontal = 8.dp),contentPadding = innerPadding)
     }
@@ -63,13 +65,14 @@ fun CategoryBody(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryNavBar(
+    categoryTitle:String = "Category",
     onBackClick:()->Unit = {},
     onFiltersClick:()-> Unit = {}
 ){
 
     CenterAlignedTopAppBar(
         title = {
-            Text("Beverages", style = MaterialTheme.typography.titleMedium)
+            Text(categoryTitle, style = MaterialTheme.typography.titleMedium)
         } ,
         navigationIcon = {
             IconButton(onClick = onBackClick) {
@@ -98,6 +101,6 @@ fun CategoryNavBar(
 @Composable
 fun CategoryPreview(){
     NectarTheme {
-        CategoryScreen()
+        CategoryScreen("Category")
     }
 }

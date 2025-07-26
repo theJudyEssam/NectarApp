@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.nectar.Categories
 import com.example.nectar.R
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.components.SearchBar
@@ -56,8 +58,8 @@ fun ExploreBody(
         verticalArrangement = Arrangement.spacedBy(12.dp), // 👈 space between rows
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(10){
-            ExploreItem()
+        items(Categories.entries){ category ->
+            ExploreItem(Category = category.Name, color = category.Color)
         }
     }
 }

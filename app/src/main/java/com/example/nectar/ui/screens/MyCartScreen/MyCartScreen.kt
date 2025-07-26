@@ -3,6 +3,7 @@ package com.example.nectar.ui.screens.MyCartScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -38,18 +39,18 @@ fun CartsScreen(){
     Scaffold(
         topBar = {CartNavBar()}
     ) {
-        innerPadding -> CartsBody(Modifier.padding(innerPadding))
+        innerPadding -> CartsBody(Modifier.padding(innerPadding), contentPadding = innerPadding)
     }
 }
 
 @Composable
 fun CartsBody(
     modifier: Modifier = Modifier.padding(top =30.dp),
-){
+    contentPadding: PaddingValues = PaddingValues()){
 
     Box(){
         LazyColumn(
-
+            contentPadding = contentPadding
         )
         {
             items(10){
@@ -62,12 +63,14 @@ fun CartsBody(
             onClick = {},
             modifier = modifier
                 .width(353.dp)
-                .height(67.dp),
+                .height(67.dp)
+                .align(Alignment.BottomCenter)
+                .padding(4.dp),
             shape = RoundedCornerShape(19.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = GreenN // or any other Color
             )
-        ) {
+        ){
             Text("Add to Cart")
         }
     }
@@ -104,7 +107,8 @@ fun CartItem(
 ){
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.padding(8.dp)
     ){
         Image(
             painter = rememberAsyncImagePainter(productImg),

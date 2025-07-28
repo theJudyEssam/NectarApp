@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,10 +26,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.nectar.ui.components.NumericCounter
@@ -53,21 +56,32 @@ fun CartsScreen(
 fun CartsBody(
     navController: NavController,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues()
+    contentPadding: PaddingValues = PaddingValues(),
+    viewModel: CartViewModel = hiltViewModel()
 ){
 
+    val cart = viewModel.cart.collectAsState()
+
     Box(){
+
+
         LazyColumn(
             contentPadding = contentPadding
         )
         {
-            items(10){
-//                CartItem(
-//                    modifier = Modifier.clickable(
-//                        onClick = { navController.navigate("product/${0}") }
-//                    )
-//                )
-            }
+           items(cart.value){
+               cartItem ->
+               CartItem(
+                   productName = cartItem.product.productName,
+                   productPrice = cartItem.product.productPrice,
+                   productImg = cartItem.product.productImg,
+                   productDetail = cartItem.product.productWeight,
+                   productQuantity = cartItem.quantity,
+                   modifier = Modifier.clickable(
+                       onClick = {navController.navigate("product/${cartItem.product.Id}")}
+                   )
+               )
+           }
         }
 
 

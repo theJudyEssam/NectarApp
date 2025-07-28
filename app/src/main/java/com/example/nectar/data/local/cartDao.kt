@@ -15,8 +15,8 @@ interface cartDao {
     @Query("SELECT * FROM cart")
     fun getAllCartItems(): Flow<List<CartItem>>
 
-    @Query("SELECT * FROM cart WHERE cartId == :id ")
-    fun getSpecificCartItem(id:Int): Flow<CartItem>
+    @Query("SELECT * FROM cart WHERE productId == :id ")
+    suspend fun getSpecificCartItem(id:Int): CartItem?
 
     @Insert
     suspend fun InsertCartItem(cartItem: CartItem)

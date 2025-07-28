@@ -42,14 +42,16 @@ fun ProductViewItem(
     title: String = "Apples",
     details: String = "333ml, Price",
     price: Float = 3.99f,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    addCart: () -> Unit = {}
 ){
 
     Column(
         modifier = modifier
             .border(1.dp, shape = RoundedCornerShape(18.dp), color = Color(0xFFE2E2E2))
             .padding(8.dp)
-            .width(173.32.dp).height(248.51.dp)
+            .width(173.32.dp)
+            .height(248.51.dp)
     ){
 
 
@@ -83,7 +85,7 @@ fun ProductViewItem(
             )
 
             AddButton(
-                onClick = {}
+                onClick = { addCart() }
             )
         }
     }

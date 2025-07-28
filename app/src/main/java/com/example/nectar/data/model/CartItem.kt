@@ -10,6 +10,7 @@ data class CartItem(
     @PrimaryKey (autoGenerate = true)
     val cartId: Int = 0,
     val quantity:Int = 0,
+    val productId:Int, // I put this here for special purposes
     val product: ProductItem
 )
 
@@ -17,6 +18,7 @@ fun CartItem.toDomain(): cart {
     return cart(
         cartId =cartId,
         quantity = quantity,
+        productId = productId,
         product = product.toDomain()
     )
 }

@@ -25,7 +25,9 @@ object DataModule {
             context,
             AppDatabase::class.java,
             "app_db"
-        ).build()
+        )
+        .fallbackToDestructiveMigration() // this is v bad practice, not to be used in production
+        .build()
 
 
     @Provides

@@ -29,30 +29,44 @@ import com.example.nectar.ui.components.PhotoCard
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.theme.NectarTheme
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.nectar.domain.model.product
 
 
 @Composable
 fun CategoryScreen(
     categoryTitle: String,
-    navController: NavController
+    navController: NavController,
+    viewModel: CategoryScreenViewModel= hiltViewModel()
 ){
+    LaunchedEffect(categoryTitle) {
+        viewModel.getProductbyCategory(categoryTitle)
+    }
+
+    val products = viewModel.products.collectAsState()
     Scaffold(
         topBar = { CategoryNavBar(categoryTitle = categoryTitle) }
     ) { innerPadding ->
         CategoryBody(modifier = Modifier.padding(horizontal = 8.dp),
             contentPadding = innerPadding,
-            navController = navController)
+            navController = navController,
+            products = products.value)
     }
 }
 
 
 @Composable
 fun CategoryBody(
+    products: List<product>,
     navController: NavController,
     modifier:Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues()
+    contentPadding: PaddingValues = PaddingValues(),
 ){
+
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(150.dp),
@@ -61,10 +75,14 @@ fun CategoryBody(
         verticalArrangement = Arrangement.spacedBy(12.dp), // 👈 space between rows
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(10){
+        items(products) { product ->
             ProductViewItem(
+                title = product.productName,
+                image = product.productImg,
+                price = product.productPrice,
+                details = product.productWeight,
                 modifier = modifier.clickable(
-                    onClick = {navController.navigate("product/${0}")}
+                    onClick = {navController.navigate("product/${product.Id}")}
                 )
             )
         }

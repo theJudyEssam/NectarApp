@@ -16,8 +16,9 @@ interface productDao {
     @Query("SELECT * FROM Products WHERE productCategory == :category")
     fun getCategoryProducts(category: String): Flow<List<ProductItem>>
 
-    @Query("Select * From Products Where productName LIKE :name")
-    fun SearchProductbyName(name:String): Flow<List<ProductItem>>
+    @Query("SELECT * FROM Products WHERE productName LIKE '%' || :name || '%'")
+    fun SearchProductbyName(name: String): Flow<List<ProductItem>>
+
 
     @Query("Select * From Products Where id == :id")
     fun GetSpecificProduct(id: Int): Flow<ProductItem>

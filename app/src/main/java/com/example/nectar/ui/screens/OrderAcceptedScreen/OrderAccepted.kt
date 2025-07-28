@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.nectar.R
 import com.example.nectar.ui.theme.BlackN
 import com.example.nectar.ui.theme.Gilroy
@@ -34,7 +35,9 @@ import com.example.nectar.ui.theme.NectarTheme
 
 
 @Composable
-fun OrderAcceptedScreen(){
+fun OrderAcceptedScreen(
+    navController: NavController
+){
 
     Box(){
         Image(
@@ -43,7 +46,9 @@ fun OrderAcceptedScreen(){
             modifier = Modifier.fillMaxSize()
         )
 
-        OrderAcceptedContent(  modifier = Modifier.align(Alignment.BottomStart)
+        OrderAcceptedContent(
+            onClick = {navController.navigate("home")},
+            modifier = Modifier.align(Alignment.BottomStart)
         )
 
 
@@ -56,7 +61,8 @@ fun OrderAcceptedScreen(){
 
 @Composable
 fun OrderAcceptedContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ){
 
     Column(
@@ -112,11 +118,11 @@ fun OrderAcceptedContent(
                 containerColor = GreenN // or any other Color
             )
         ){
-            Text("Track")
+            Text("Track your Order")
         }
 
         Button(
-            onClick = {},
+            onClick = {onClick()},
             modifier = modifier
                 .width(353.dp)
                 .height(67.dp)
@@ -142,6 +148,5 @@ fun OrderAcceptedContent(
 @Composable
 fun OrderAcceptedPreview(){
     NectarTheme {
-        OrderAcceptedScreen()
     }
 }

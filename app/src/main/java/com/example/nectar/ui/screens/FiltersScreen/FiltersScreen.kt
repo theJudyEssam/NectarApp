@@ -1,6 +1,7 @@
 package com.example.nectar.ui.screens.FiltersScreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
@@ -55,20 +57,21 @@ fun FilterBody(
         modifier = modifier
             .fillMaxSize()
             .background(color = Color(0xFFF2F3F2), shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-            .padding(top = 30.dp)
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp), 
+
+        verticalArrangement = Arrangement.Center
 
     ){
 
         CategoriesSection()
         PricesSection()
 
-        Spacer(modifier.padding(32.dp))
         Button(
             onClick = {},
             modifier = modifier
                 .width(353.dp)
-                .height(67.dp),
+                .height(67.dp)
+                .align(Alignment.CenterHorizontally),
             shape = RoundedCornerShape(19.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = GreenN // or any other Color
@@ -76,6 +79,7 @@ fun FilterBody(
         ) {
             Text("Apply Filter")
         }
+
     }
 }
 

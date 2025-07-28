@@ -3,6 +3,7 @@ package com.example.nectar.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -14,9 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.nectar.ui.theme.GreenN
+import com.example.nectar.ui.theme.GreyN
 
 @Composable
 fun NumericCounter(
@@ -30,7 +34,7 @@ fun NumericCounter(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier
-            .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
     ) {
         IconButton(
             onClick = { if (value > min) onValueChange(value - 1) },
@@ -42,14 +46,18 @@ fun NumericCounter(
         Text(
             text = value.toString(),
             style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(4.dp)
+                .background(color = GreyN, shape = RoundedCornerShape(12.dp))
         )
 
         IconButton(
             onClick = { if (value < max) onValueChange(value + 1) },
             enabled = value < max
         ) {
-            Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "Decrease")
+            Icon(imageVector = Icons.Default.KeyboardArrowUp,
+                contentDescription = "Increase",
+                tint = GreenN)
         }
     }
 }

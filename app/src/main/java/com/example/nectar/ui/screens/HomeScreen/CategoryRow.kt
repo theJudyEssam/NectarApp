@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,21 +16,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.nectar.domain.model.product
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.theme.GreenN
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.items
+import com.example.nectar.data.model.ProductItem
 
 
 @Composable
 fun HomeCategory(
     modifier: Modifier = Modifier,
     text:String= "Exclusive Offers",
-    navController: NavController
+    navController: NavController,
+    products: List<product>
 ){
     Column(
         modifier = modifier.padding(16.dp)
     ) {
         CategoryTitle(text = text)
-        CategoryItems(navController)
+        CategoryItems(navController, products)
 
     }
 }
@@ -54,19 +60,28 @@ fun CategoryTitle(
 
 @Composable
 fun CategoryItems(
-    navController: NavController
+    navController: NavController,
+    products: List<product>
 ){
 
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(16.dp), // gap between items
-//        contentPadding = PaddingValues(horizontal = 8.dp),   // optional padding on both sides
+        horizontalArrangement = Arrangement.spacedBy(16.dp),// gap between items
         modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
     ) {
-        items(10) { index ->
+
+        items(products) { product ->
             ProductViewItem(
+                title = product.productName,
+                image = product.productImg,
+                price = product.productPrice,
+                details = product.productWeight,
                 modifier = Modifier.clickable(
-                    onClick = { navController.navigate("product/${0}") } // for now i will put 0 while i set up product logic
+                    onClick = {navController.navigate("product/${product.Id}")}
                 )
             )
-        }}
+        }
+    }
 }
+
+
+

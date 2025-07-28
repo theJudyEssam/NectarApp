@@ -1,5 +1,6 @@
 package com.example.nectar.domain.model
 
+import com.example.nectar.data.model.Nutrition
 import com.example.nectar.data.model.ProductItem
 
 class product(
@@ -10,7 +11,7 @@ class product(
     var productPrice: Float,
     var productDescription: String,
     var productCategory: String,
-    var productNutrition: String,
+    var productNutrition: Nutrition,
     var productRating: Int
 )
 

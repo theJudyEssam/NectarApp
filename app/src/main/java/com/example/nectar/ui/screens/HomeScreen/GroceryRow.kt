@@ -26,13 +26,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.nectar.Categories
 import com.example.nectar.R
+import com.example.nectar.domain.model.product
 import com.example.nectar.ui.theme.Gilroy
 
 
 @Composable
 fun GroceriesRow(
     navController: NavController,
-    title:String = "title"
+    title:String = "title",
+    products: List<product>
 ){
 
     Column(
@@ -51,7 +53,7 @@ fun GroceriesRow(
                     onClick = {navController.navigate("categories/${category.Name}")})
             }}
 
-        CategoryItems(navController)
+        CategoryItems(navController, products)
     }
 
 

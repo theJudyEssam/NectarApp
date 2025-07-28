@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,10 +35,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.nectar.R
+import com.example.nectar.ui.components.FakeSearchBar
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.components.SearchBar
 import com.example.nectar.ui.theme.GreenN
@@ -54,8 +57,9 @@ val imageUrls = listOf(
 @Composable
 fun HomeScreen(
     modifier : Modifier = Modifier.padding(16.dp),
-    navController: NavController
+    navController: NavController,
 ){
+
         HomeBody(
             navController,
             modifier = modifier.padding(16.dp))
@@ -66,17 +70,21 @@ fun HomeScreen(
 fun HomeBody(
     navController: NavController,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues()
+    contentPadding: PaddingValues = PaddingValues(),
+    viewModel: HomeScreenViewModel = hiltViewModel()
+
 ){
+
+    val products = viewModel.products.collectAsState()
 
     LazyColumn(
         contentPadding = contentPadding,
     ) {
-        item {HomeScreenBar() }
+        item {HomeScreenBar(navController) }
         item { BannerSlider(imageUrls)}
-        item { HomeCategory(navController = navController, text = "Exclusive Offers") }
-        item { HomeCategory(navController = navController, text = "Best Selling") }
-        item { GroceriesRow(navController, title = "Groceries") }
+        item { HomeCategory(navController = navController, text = "Exclusive Offers", products = products.value)}
+        item { HomeCategory(navController = navController, text = "Best Selling", products =  products.value) }
+        item { GroceriesRow(navController, title = "Groceries", products =  products.value) }
     }
 
 
@@ -117,6 +125,7 @@ fun BannerSlider(images: List<String>) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenBar(
+    navController: NavController,
     query: String = "",
     onQueryChange: () -> Unit ={}
 ){
@@ -140,7 +149,7 @@ fun HomeScreenBar(
                     )
                     Text("Dhaka, Banassre", fontSize = 18.sp)
                 }
-                SearchBar()
+                FakeSearchBar(navController)
             }
 }
 

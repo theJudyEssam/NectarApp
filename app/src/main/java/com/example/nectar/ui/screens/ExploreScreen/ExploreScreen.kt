@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.nectar.Categories
 import com.example.nectar.R
+import com.example.nectar.ui.components.FakeSearchBar
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.components.SearchBar
 import com.example.nectar.ui.theme.Gilroy
@@ -44,7 +45,7 @@ fun ExploreScreen(
  navController: NavController
 ){
     Scaffold(
-        topBar = {ExploreTopBar()}
+        topBar = {ExploreTopBar(navController)}
     ) {
         innerPadding ->
         ExploreBody( navController = navController,
@@ -80,6 +81,7 @@ fun ExploreBody(
 
 @Composable
 fun ExploreTopBar(
+    navController: NavController,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -97,7 +99,7 @@ fun ExploreTopBar(
             ), 
             modifier = modifier.padding(8.dp)
         )
-        SearchBar()
+        FakeSearchBar(navController)
     }
 }
 

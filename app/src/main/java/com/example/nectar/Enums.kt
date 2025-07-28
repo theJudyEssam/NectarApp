@@ -8,7 +8,7 @@ enum class PriceFilters(val Name:String){
 }
 
 enum class Categories(val Name:String, val Color: Color){
-    FRUITS("Fruits & Vegetables", Color(0xFF53B175).copy(alpha = 0.15f)),
+    FRUITS("Fresh Fruits & Vegetable", Color(0xFF53B175).copy(alpha = 0.15f)),
     COOKING("Cooking Oil & Ghee", Color(0xF8A44CB2)),
     MEAT("Meat & Fish", Color(0xF7A59340)),
     BAKERY("Bakery & Snacks", Color(0xD3B0E040)),

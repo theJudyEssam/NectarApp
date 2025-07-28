@@ -35,7 +35,6 @@ import com.example.nectar.ui.components.NumericCounter
 import com.example.nectar.ui.theme.GreenN
 
 
-// please god help please help
 @Composable
 fun CartsScreen(
     navController: NavController
@@ -44,7 +43,9 @@ fun CartsScreen(
         topBar = {CartNavBar()}
     ) {
         innerPadding ->
-        CartsBody(navController, modifier = Modifier.padding(innerPadding), contentPadding = innerPadding)
+        CartsBody(navController,
+            modifier = Modifier.padding(innerPadding),
+            contentPadding = innerPadding)
     }
 }
 
@@ -52,7 +53,8 @@ fun CartsScreen(
 fun CartsBody(
     navController: NavController,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues()){
+    contentPadding: PaddingValues = PaddingValues()
+){
 
     Box(){
         LazyColumn(
@@ -60,18 +62,18 @@ fun CartsBody(
         )
         {
             items(10){
-                CartItem(
-                    modifier = Modifier.clickable(
-                        onClick = { navController.navigate("product/${0}") }
-                    )
-                )
+//                CartItem(
+//                    modifier = Modifier.clickable(
+//                        onClick = { navController.navigate("product/${0}") }
+//                    )
+//                )
             }
         }
 
 
         Button(
-            onClick = {},
-            modifier = modifier
+            onClick = {navController.navigate("order_accepted")},
+            modifier = Modifier
                 .width(353.dp)
                 .height(67.dp)
                 .align(Alignment.BottomCenter)
@@ -81,7 +83,7 @@ fun CartsBody(
                 containerColor = GreenN // or any other Color
             )
         ){
-            Text("Add to Cart")
+            Text("Proceed to checkout")
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.nectar.DI
 import android.content.Context
 import androidx.room.Room
 import com.example.nectar.data.local.AppDatabase
+import com.example.nectar.data.local.cartDao
 import com.example.nectar.data.local.productDao
 import dagger.Module
 import dagger.Provides
@@ -29,4 +30,7 @@ object DataModule {
 
     @Provides
     fun provideProductDao(db: AppDatabase): productDao = db.productDao()
+
+    @Provides
+    fun provideCartDao(db: AppDatabase): cartDao = db.cartDao()
 }

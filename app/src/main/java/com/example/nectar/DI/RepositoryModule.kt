@@ -1,6 +1,8 @@
 package com.example.nectar.DI
 
+import com.example.nectar.data.repository.CartLocalRepository
 import com.example.nectar.data.repository.ProductLocalRepository
+import com.example.nectar.domain.repository.CartRepository
 import com.example.nectar.domain.repository.ProductRepository
 import dagger.Binds
 import dagger.Module
@@ -18,5 +20,15 @@ abstract class RepositoryModule {
     abstract fun bindProductRepository(
         impl: ProductLocalRepository
     ): ProductRepository
+
+
+
+    @Binds
+    @Singleton
+    abstract fun bindCartRepository(
+        impl: CartLocalRepository
+    ): CartRepository
+
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.nectar.data.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.nectar.domain.model.product
@@ -9,14 +10,14 @@ import com.example.nectar.domain.model.product
 data class ProductItem (
     @PrimaryKey (autoGenerate = true)
     var Id: Int = 0,
-    var productName: String,
-    var productWeight: String,
+    val productName: String,
+    val productWeight: String,
     var productImg: String,
     var productPrice: Float,
     var productDescription: String,
     var productCategory: String,
-    var productNutrition: String,
-    var productRating: Int
+    var productRating: Int,
+    var productNutrition: Nutrition
 )
 
 fun ProductItem.toDomain(): product {
@@ -32,3 +33,12 @@ fun ProductItem.toDomain(): product {
         productRating = productRating
     )
 }
+
+
+
+data class Nutrition(
+    val protein: Float,
+    val carbs: Float,
+    val fat: Float,
+    val fiber: Float
+)

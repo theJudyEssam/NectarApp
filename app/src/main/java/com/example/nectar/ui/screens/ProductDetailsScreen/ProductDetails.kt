@@ -1,5 +1,6 @@
 package com.example.nectar.ui.screens.ProductDetailsScreen
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -21,6 +22,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,7 +36,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.nectar.data.model.Nutrition
+import com.example.nectar.domain.model.product
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductDetailsSections
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductNameSection
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductNutritionSection
@@ -46,12 +52,26 @@ import com.example.nectar.ui.theme.NectarTheme
 
 @Composable
 fun ProductDetailsScreen(
-    productId: Int = 0,
-    modifier: Modifier = Modifier
+    productId: Int,
+    viewModel: ProductsDetailsViewModel = hiltViewModel()
 ){
 
-    // add logic here to get the product based on its id and all
-    ProductBody()
+    LaunchedEffect(productId) {
+        viewModel.fetchProduct(productId)
+    }
+    val product = viewModel.product.collectAsState().value
+
+    Log.d("product details", "${product.Id}")
+
+
+    ProductBody(
+        productURL = product.productImg,
+        productNutrition = product.productNutrition,
+        productName = product.productName,
+        productDetails = product.productWeight,
+        productDescription = product.productDescription,
+        productPrice = product.productPrice
+    )
 }
 
 
@@ -63,7 +83,7 @@ fun ProductBody(
     productDetails: String = "13, price",
     productDescription: String = "Apples are nutritious. Apples may be good for weight loss. apples may be good for your heart. As part of a healtful and varied diet.",
     productReview:Int = 4,
-    productNutrition: Map<String, String> = emptyMap(),
+    productNutrition: Nutrition,
     productPrice: Float = 0.0f,
     onAddCart: () -> Unit = {}
 ){
@@ -111,7 +131,7 @@ fun ProductInfo(
     productReview: Int,
     productURL: String,
     productDetails: String,
-    productNutrition: Map<String, String>,
+    productNutrition: Nutrition,
     productDescription: String,
     modifier: Modifier = Modifier
 ){
@@ -136,7 +156,7 @@ fun ProductInfo(
         item{ ProductDetailsSections(modifier,productDescription) }
 
         item{
-            ProductNutritionSection()
+            ProductNutritionSection(productNutrition = productNutrition)
         }
         item{
             ProductReviewSection(rating = productReview)
@@ -160,6 +180,5 @@ fun ProductNavBar(){
 @Composable
 fun ProductScreenPreview(){
     NectarTheme {
-        ProductDetailsScreen()
     }
 }

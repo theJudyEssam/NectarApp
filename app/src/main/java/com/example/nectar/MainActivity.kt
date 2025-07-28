@@ -9,10 +9,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import com.example.nectar.ui.navigation.AppNavigation
 import com.example.nectar.ui.navigation.BottomNavigationBar
-import com.example.nectar.ui.navigation.NavHostContainer
-import com.example.nectar.ui.screens.MyCartScreen.CartsScreen
-import com.example.nectar.ui.screens.SearchScreen.SearchScreen
+import com.example.nectar.ui.navigation.MainContainer
 import com.example.nectar.ui.theme.NectarTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,16 +28,7 @@ class MainActivity : ComponentActivity() {
             NectarTheme {
                 val navController = rememberNavController()
                 Surface(color = Color.White){
-
-                    Scaffold(
-                        bottomBar = { BottomNavigationBar(navController) }
-                    ) {
-                        padding ->
-                        NavHostContainer(
-                            navController =navController,
-                            padding = padding
-                        )
-                    }
+                    AppNavigation(navController)
                 }
             }
         }

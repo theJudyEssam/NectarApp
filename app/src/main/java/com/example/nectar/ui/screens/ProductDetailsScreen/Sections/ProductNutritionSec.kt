@@ -18,11 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.nectar.data.model.Nutrition
 
 
 @Composable
 fun ProductNutritionSection(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    productNutrition: Nutrition
 ){
 
     var nutritionVisible by remember { mutableStateOf(false) }
@@ -51,11 +53,10 @@ fun ProductNutritionSection(
         AnimatedVisibility(
             nutritionVisible == true        ) {
             Column( modifier = modifier.padding(8.dp)) {
-                // for now i will put four oof those
-                NutritionItem()
-                NutritionItem()
-                NutritionItem()
-                NutritionItem()
+                NutritionItem("Protein", productNutrition.protein)
+                NutritionItem("Fats", productNutrition.fat)
+                NutritionItem("Carbs", productNutrition.carbs)
+                NutritionItem("Fiber", productNutrition.fiber)
             }
         }
     }
@@ -65,9 +66,9 @@ fun ProductNutritionSection(
 
 @Composable
 fun NutritionItem(
-    modifier: Modifier = Modifier,
     Type:String = "Calories",
-    Amount:String = "100cal"
+    Amount:Float,
+    modifier: Modifier = Modifier,
 ){
 
     Row(
@@ -81,7 +82,7 @@ fun NutritionItem(
 
 
         Text(
-            Amount,
+            "$Amount",
             style = MaterialTheme.typography.labelSmall
         )
     }

@@ -13,6 +13,17 @@ class GetCartUseCase @Inject constructor(
     operator fun invoke(): Flow<List<cart>> = repository.getAllCartItems()
 }
 
+class ObserveCartUseCase @Inject constructor(
+    private val repository: CartRepository
+){
+    operator fun invoke(id: Int): Flow<cart?> = repository.observeCartItem(id)
+}
+
+class GetSpecificCartUseCase @Inject constructor(
+    private val repository: CartRepository
+){
+    suspend operator fun invoke(id:Int): cart? = repository.getCartItem(id)
+}
 class InsertCartUseCase @Inject constructor(
     private val repository: CartRepository
 ){
@@ -30,7 +41,6 @@ class UpdateCartUseCase @Inject constructor(
 ){
     suspend operator fun invoke(cart:cart) = repository.updateCartItem(cart)
 }
-
 
 class ToggleUseCase @Inject constructor(
     private val repository: CartRepository

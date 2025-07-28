@@ -1,6 +1,6 @@
 package com.example.nectar.data.repository
 
-import com.example.nectar.data.local.cartDao
+import com.example.nectar.data.local.Dao.cartDao
 import com.example.nectar.data.model.CartItem
 import com.example.nectar.data.model.toDomain
 import com.example.nectar.domain.model.cart
@@ -14,10 +14,17 @@ import javax.inject.Inject
 class CartLocalRepository
 @Inject constructor(private val cartDao: cartDao): CartRepository {
 
+    // Three functions for accessing the database, in different ways
+
     override fun getAllCartItems(): Flow<List<cart>> {
         return cartDao.getAllCartItems().map {
             list -> list.map{ it.toDomain()}
         }
+    }
+
+    override fun observeCartItem(id: Int): Flow<cart?> {
+        val cartItem = cartDao.observeCartItem(id).map{it?.toDomain()}
+        return cartItem
     }
 
     override suspend fun getCartItem(id: Int): cart? {
@@ -26,8 +33,7 @@ class CartLocalRepository
     }
 
 
-    // these three functions arent to be used directly in
-    // the view layer, but to be "helpers" to the functions here
+    // Three "helper functions" to be used within the useCase
     override suspend fun insertCartItem(cart: cart) {
         cartDao.InsertCartItem(cart.toEntity())
     }
@@ -41,6 +47,7 @@ class CartLocalRepository
     }
 
 
+    // Three functions for Cart actions such as adding, deleting, incrementing, and decrementing
     override suspend fun toggleCartItem(product: product) {
         val item = getCartItem(product.Id) // check if existing
         if(item != null){
@@ -56,8 +63,6 @@ class CartLocalRepository
         }
     }
 
-
-
     override suspend fun incrementCartItem(product: product){
         val item = getCartItem(product.Id)
         if(item != null){
@@ -69,7 +74,6 @@ class CartLocalRepository
             insertCartItem(new_item)
         }
     }
-
 
     override suspend fun decrementCartItem(product: product){
         val item = getCartItem(product.Id)
@@ -83,6 +87,4 @@ class CartLocalRepository
             }
         }
     }
-
-
 }

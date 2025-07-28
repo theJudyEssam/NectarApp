@@ -22,6 +22,7 @@ import com.example.nectar.ui.theme.GreenN
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.items
 import com.example.nectar.data.model.ProductItem
+import com.example.nectar.ui.screens.MyCartScreen.CartViewModel
 
 
 @Composable
@@ -29,13 +30,18 @@ fun HomeCategory(
     modifier: Modifier = Modifier,
     text:String= "Exclusive Offers",
     navController: NavController,
-    products: List<product>
+    products: List<product>,
+    cartItemsId: List<Int>,
+    cartViewModel: CartViewModel
 ){
     Column(
         modifier = modifier.padding(16.dp)
     ) {
         CategoryTitle(text = text)
-        CategoryItems(navController, products)
+        CategoryItems(navController,
+            products,
+            cartItemsId,
+            cartViewModel)
 
     }
 }
@@ -61,7 +67,9 @@ fun CategoryTitle(
 @Composable
 fun CategoryItems(
     navController: NavController,
-    products: List<product>
+    products: List<product>,
+    cartItemsId: List<Int>,
+    cartViewModel: CartViewModel
 ){
 
     LazyRow(
@@ -77,7 +85,9 @@ fun CategoryItems(
                 details = product.productWeight,
                 modifier = Modifier.clickable(
                     onClick = {navController.navigate("product/${product.Id}")}
-                )
+                ),
+                isInCart = cartItemsId.contains(product.Id),
+                addCart = {cartViewModel.ToggleCartItem(product)}
             )
         }
     }

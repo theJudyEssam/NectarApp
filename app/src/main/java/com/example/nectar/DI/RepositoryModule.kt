@@ -28,7 +28,4 @@ abstract class RepositoryModule {
     abstract fun bindCartRepository(
         impl: CartLocalRepository
     ): CartRepository
-
-
-
 }

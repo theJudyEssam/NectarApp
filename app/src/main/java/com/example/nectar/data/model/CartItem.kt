@@ -10,7 +10,7 @@ data class CartItem(
     @PrimaryKey (autoGenerate = true)
     val cartId: Int = 0,
     val quantity:Int = 0,
-    val productId:Int, // I put this here for special purposes
+    val productId:Int, // the choice of productId in CartItem
     val product: ProductItem
 )
 

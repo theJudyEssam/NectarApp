@@ -25,6 +25,7 @@ import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.theme.NectarTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.nectar.domain.model.product
@@ -42,6 +43,7 @@ fun CategoryScreen(
         categoryViewModel.getProductbyCategory(categoryTitle)
     }
     val products = categoryViewModel.products.collectAsState()
+    val cartItemIds by cartViewModel.cartItemIds.collectAsState()
 
     Scaffold(
         topBar = { CategoryNavBar(categoryTitle = categoryTitle) }
@@ -50,7 +52,8 @@ fun CategoryScreen(
             contentPadding = innerPadding,
             navController = navController,
             products = products.value,
-            cartViewModel = cartViewModel
+            cartViewModel = cartViewModel,
+            cartItemIds = cartItemIds
         )
     }
 }
@@ -62,7 +65,8 @@ fun CategoryBody(
     navController: NavController,
     modifier:Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    cartViewModel: CartViewModel
+    cartViewModel: CartViewModel,
+    cartItemIds: List<Int>
 ){
 
 
@@ -82,7 +86,8 @@ fun CategoryBody(
                 modifier = modifier.clickable(
                     onClick = {navController.navigate("product/${product.Id}")}
                 ),
-                addCart = {cartViewModel.ToggleCartItem(product)}
+                addCart = {cartViewModel.ToggleCartItem(product)},
+                isInCart = cartItemIds.contains(product.Id)
             )
         }
     }

@@ -52,6 +52,10 @@ fun SearchScreen(
     var query by remember {mutableStateOf("")}
 
 
+    val filteredProducts = products.filter {
+        it.productName.contains(query, ignoreCase = true)
+    }
+
 
 
     Scaffold(
@@ -63,13 +67,12 @@ fun SearchScreen(
             query = query,
             onQueryChange = {
                 query = it
-                viewModel.Search(query)
             }
             )}
     )
     {
         innerPadding ->
-        SearchBody(navController, products,
+        SearchBody(navController, filteredProducts,
             modifier = Modifier.padding(8.dp),
             contentPadding = innerPadding)
 

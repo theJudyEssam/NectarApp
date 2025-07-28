@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -43,7 +44,8 @@ fun ProductViewItem(
     details: String = "333ml, Price",
     price: Float = 3.99f,
     modifier: Modifier = Modifier,
-    addCart: () -> Unit = {}
+    addCart: () -> Unit = {},
+    isInCart: Boolean = false
 ){
 
     Column(
@@ -85,7 +87,8 @@ fun ProductViewItem(
             )
 
             AddButton(
-                onClick = { addCart() }
+                onClick = { addCart() },
+                isInCart = isInCart
             )
         }
     }
@@ -94,7 +97,8 @@ fun ProductViewItem(
 
 @Composable
 fun AddButton(
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isInCart:Boolean = false
 ){
     IconButton(
         onClick = onClick,
@@ -102,7 +106,7 @@ fun AddButton(
             .background(GreenN, shape = RoundedCornerShape(17.dp))
     ){
         Icon(
-            imageVector = Icons.Default.Add,
+            imageVector = if (isInCart) Icons.Default.Check else Icons.Default.Add,
             contentDescription = "Add to cart Button",
             tint = WhiteN
         )

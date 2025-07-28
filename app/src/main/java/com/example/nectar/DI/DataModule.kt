@@ -3,8 +3,8 @@ package com.example.nectar.DI
 import android.content.Context
 import androidx.room.Room
 import com.example.nectar.data.local.AppDatabase
-import com.example.nectar.data.local.cartDao
-import com.example.nectar.data.local.productDao
+import com.example.nectar.data.local.Dao.cartDao
+import com.example.nectar.data.local.Dao.productDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,6 @@ import javax.inject.Singleton
 
 
 
-// for getting the database
 @Module
 @InstallIn(SingletonComponent::class)
 object DataModule {
@@ -28,7 +27,6 @@ object DataModule {
         )
         .fallbackToDestructiveMigration() // this is v bad practice, not to be used in production
         .build()
-
 
     @Provides
     fun provideProductDao(db: AppDatabase): productDao = db.productDao()

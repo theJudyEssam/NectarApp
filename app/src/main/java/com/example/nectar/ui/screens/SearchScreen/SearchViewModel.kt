@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nectar.Categories
 import com.example.nectar.domain.model.product
+import com.example.nectar.domain.usecases.GetProductsUseCase
 import com.example.nectar.domain.usecases.SearchProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val SearchProductUseCase: SearchProductUseCase
+    private val SearchProductUseCase: SearchProductUseCase,
+    private val GetProductsUseCase: GetProductsUseCase
 ): ViewModel() {
 
 
@@ -26,19 +28,12 @@ class SearchViewModel @Inject constructor(
     var _queryState = MutableStateFlow<String>(Categories.BEVERAGES.Name)
     val categoryState: StateFlow<String> get() =_queryState
 
-    val products: StateFlow<List<product>> = _queryState
-        .flatMapLatest {
-                query ->
-            SearchProductUseCase(query)
-        }.stateIn(
-            viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList()
-        )
+    val products = GetProductsUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = emptyList()
+    )
 
-
-    fun Search(query: String){
-        _queryState.value = query
-        Log.d("Query log", "${_queryState.value}")
-    }
 
 
 

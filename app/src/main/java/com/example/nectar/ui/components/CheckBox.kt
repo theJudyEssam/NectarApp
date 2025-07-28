@@ -29,6 +29,4 @@ fun FilterCheckbox(
             onCheckedChange = { checked = it }
         )
     }
-
-
 }

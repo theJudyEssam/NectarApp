@@ -2,7 +2,6 @@ package com.example.nectar.ui.screens.HomeScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,11 +19,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,12 +35,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.example.nectar.R
 import com.example.nectar.ui.components.FakeSearchBar
-import com.example.nectar.ui.components.ProductViewItem
-import com.example.nectar.ui.components.SearchBar
-import com.example.nectar.ui.theme.GreenN
+import com.example.nectar.ui.screens.MyCartScreen.CartViewModel
 import com.example.nectar.ui.theme.NectarTheme
 
 
@@ -58,11 +52,16 @@ val imageUrls = listOf(
 fun HomeScreen(
     modifier : Modifier = Modifier.padding(16.dp),
     navController: NavController,
+    HomeviewModel: HomeScreenViewModel = hiltViewModel(),
+    cartViewModel: CartViewModel = hiltViewModel()
 ){
 
         HomeBody(
             navController,
-            modifier = modifier.padding(16.dp))
+            modifier = modifier.padding(16.dp),
+            viewModel = HomeviewModel,
+            cartViewModel = cartViewModel
+        )
 }
 
 @Composable
@@ -71,20 +70,37 @@ fun HomeBody(
     navController: NavController,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel,
+    cartViewModel: CartViewModel
 
 ){
 
     val products = viewModel.products.collectAsState()
+    val cartItemIds by cartViewModel.cartItemIds.collectAsState()
+
 
     LazyColumn(
         contentPadding = contentPadding,
     ) {
         item {HomeScreenBar(navController) }
         item { BannerSlider(imageUrls)}
-        item { HomeCategory(navController = navController, text = "Exclusive Offers", products = products.value)}
-        item { HomeCategory(navController = navController, text = "Best Selling", products =  products.value) }
-        item { GroceriesRow(navController, title = "Groceries", products =  products.value) }
+
+        item { HomeCategory(navController = navController,
+            text = "Exclusive Offers",
+            products = products.value,
+            cartItemsId = cartItemIds,
+            cartViewModel = cartViewModel)}
+
+        item { HomeCategory(navController = navController,
+            text = "Best Selling",
+            products = products.value,
+            cartItemsId = cartItemIds,
+            cartViewModel = cartViewModel)}
+        item { GroceriesRow(navController,
+            title = "Groceries",
+            products =  products.value,
+            cartItemsId = cartItemIds,
+            cartViewModel = cartViewModel) }
     }
 
 

@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import com.example.nectar.Categories
 import com.example.nectar.R
 import com.example.nectar.domain.model.product
+import com.example.nectar.ui.screens.MyCartScreen.CartViewModel
 import com.example.nectar.ui.theme.Gilroy
 
 
@@ -34,7 +35,9 @@ import com.example.nectar.ui.theme.Gilroy
 fun GroceriesRow(
     navController: NavController,
     title:String = "title",
-    products: List<product>
+    products: List<product>,
+    cartItemsId: List<Int>,
+    cartViewModel: CartViewModel
 ){
 
     Column(
@@ -53,7 +56,10 @@ fun GroceriesRow(
                     onClick = {navController.navigate("categories/${category.Name}")})
             }}
 
-        CategoryItems(navController, products)
+        CategoryItems(navController,
+            products,
+            cartItemsId,
+            cartViewModel)
     }
 
 

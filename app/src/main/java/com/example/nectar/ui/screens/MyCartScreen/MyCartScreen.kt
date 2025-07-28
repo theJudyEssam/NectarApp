@@ -24,9 +24,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,7 +49,9 @@ fun CartsScreen(
         innerPadding ->
         CartsBody(navController,
             modifier = Modifier.padding(innerPadding),
-            contentPadding = innerPadding)
+            contentPadding = innerPadding,
+            cartViewModel = hiltViewModel()
+            )
     }
 }
 
@@ -57,10 +60,11 @@ fun CartsBody(
     navController: NavController,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    viewModel: CartViewModel = hiltViewModel()
+    cartViewModel: CartViewModel
 ){
 
-    val cart = viewModel.cart.collectAsState()
+    val cart = cartViewModel.cart.collectAsState()
+
 
     Box(){
 
@@ -71,6 +75,13 @@ fun CartsBody(
         {
            items(cart.value){
                cartItem ->
+
+//               LaunchedEffect(cartItem.productId) {
+//                   cartViewModel.fetchCartItem(cartItem.productId) }
+//               val quantity by cartViewModel.cartItemQuantity.collectAsState()
+//
+
+
                CartItem(
                    productName = cartItem.product.productName,
                    productPrice = cartItem.product.productPrice,
@@ -79,7 +90,9 @@ fun CartsBody(
                    productQuantity = cartItem.quantity,
                    modifier = Modifier.clickable(
                        onClick = {navController.navigate("product/${cartItem.product.Id}")}
-                   )
+                   ),
+                   onIncrement = { cartViewModel.Increment(cartItem.product) },
+                   onDecrement = { cartViewModel.Decrement(cartItem.product) },
                )
            }
         }
@@ -94,7 +107,7 @@ fun CartsBody(
                 .padding(4.dp),
             shape = RoundedCornerShape(19.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = GreenN // or any other Color
+                containerColor = GreenN
             )
         ){
             Text("Proceed to checkout")
@@ -129,7 +142,9 @@ fun CartItem(
     productName: String = "Product Name",
     productDetail:String = "1kg, Price",
     productQuantity:Int = 1,
-    productPrice: Float = 4.99f
+    productPrice: Float = 4.99f,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
 ){
 
     Row(
@@ -176,15 +191,15 @@ fun CartItem(
 
             }
 
-            // Numeric Counter Price
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = modifier.padding(4.dp)
             ){
                 NumericCounter(
                     modifier= modifier.weight(1f),
-                    value = productQuantity,
-                    onValueChange = onQuantityChange
+                    onIncrement = onIncrement,
+                    onDecrement = onDecrement,
+                    value = productQuantity
                 )
 
                 Spacer(modifier = Modifier.weight(1f))

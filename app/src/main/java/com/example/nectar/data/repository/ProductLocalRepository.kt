@@ -1,6 +1,6 @@
 package com.example.nectar.data.repository
 
-import com.example.nectar.data.local.productDao
+import com.example.nectar.data.local.Dao.productDao
 import com.example.nectar.data.model.toDomain
 import com.example.nectar.domain.model.product
 import com.example.nectar.domain.repository.ProductRepository
@@ -30,5 +30,4 @@ class ProductLocalRepository @Inject constructor(private val productDao: product
     override fun getProduct(id: Int): Flow<product> {
         return productDao.GetSpecificProduct(id).map{ it.toDomain() }
         }
-
 }

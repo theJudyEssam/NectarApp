@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,12 +23,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.nectar.ui.theme.GreenN
 import com.example.nectar.ui.theme.GreyN
+import com.example.nectar.ui.theme.Minus
+import com.example.nectar.ui.theme.WhiteN
 
 @Composable
 fun NumericCounter(
     modifier: Modifier = Modifier,
     value: Int,
-    onValueChange: (Int) -> Unit,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
     min: Int = 0,
     max: Int = 100
 ) {
@@ -37,10 +42,10 @@ fun NumericCounter(
             .clip(RoundedCornerShape(8.dp))
     ) {
         IconButton(
-            onClick = { if (value > min) onValueChange(value - 1) },
+            onClick = { onDecrement(value - 1) },
             enabled = value > min
         ) {
-            Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "Decrease")
+            Icon(imageVector = Minus, contentDescription = "Decrease")
         }
 
         Text(
@@ -48,14 +53,14 @@ fun NumericCounter(
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(4.dp)
-                .background(color = GreyN, shape = RoundedCornerShape(12.dp))
+                .background(color = WhiteN, shape = RoundedCornerShape(12.dp))
         )
 
         IconButton(
-            onClick = { if (value < max) onValueChange(value + 1) },
+            onClick = { if (value < max) onIncrement(value + 1) },
             enabled = value < max
         ) {
-            Icon(imageVector = Icons.Default.KeyboardArrowUp,
+            Icon(imageVector = Icons.Default.Add,
                 contentDescription = "Increase",
                 tint = GreenN)
         }

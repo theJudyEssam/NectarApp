@@ -20,8 +20,10 @@ import com.example.nectar.ui.theme.Gilroy
 fun ProductPriceSection(
     price: Float,
     quantity : Int = 0,
-    onQuantityChange: (Int) -> Unit = {}
-){
+    onIncrement: (Int) -> Unit = {},
+    onDecrement:(Int) -> Unit = {}
+
+    ){
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -31,9 +33,10 @@ fun ProductPriceSection(
         NumericCounter(
             modifier = Modifier,
             value = quantity,
-            onValueChange = onQuantityChange  // still to be implemented
+            onIncrement = onIncrement,
+            onDecrement = onDecrement
         )
-//
+
         Spacer(
             Modifier.padding(horizontal = 90.dp)
         )

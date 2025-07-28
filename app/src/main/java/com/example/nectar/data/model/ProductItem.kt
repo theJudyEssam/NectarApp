@@ -36,6 +36,7 @@ fun ProductItem.toDomain(): product {
 
 
 
+// Nested JSON in the table, representing the nutritions
 data class Nutrition(
     val protein: Float,
     val carbs: Float,

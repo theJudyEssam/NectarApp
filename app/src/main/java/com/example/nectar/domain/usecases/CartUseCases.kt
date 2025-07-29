@@ -59,3 +59,9 @@ class DecrementUseCase @Inject constructor(
 ){
     suspend operator fun invoke(product: product) = repository.decrementCartItem(product)
 }
+
+class EmptyCartUseCase @Inject constructor(
+    private val repository: CartRepository
+){
+    suspend operator fun invoke() = repository.emptyCart()
+}

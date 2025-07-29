@@ -27,6 +27,10 @@ class CartLocalRepository
         return cartItem
     }
 
+    override suspend fun emptyCart() {
+        cartDao.emptyCart()
+    }
+
     override suspend fun getCartItem(id: Int): cart? {
         val cartItem = cartDao.getSpecificCartItem(id)?.toDomain()
         return cartItem

@@ -51,7 +51,7 @@ fun ProductViewItem(
     Column(
         modifier = modifier
             .border(1.dp, shape = RoundedCornerShape(18.dp), color = Color(0xFFE2E2E2))
-            .padding(8.dp)
+            .padding(8.dp).padding(horizontal = 4.dp)
             .width(173.32.dp)
             .height(248.51.dp)
     ){

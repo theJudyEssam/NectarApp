@@ -1,5 +1,6 @@
 package com.example.nectar.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -42,8 +43,8 @@ fun NumericCounter(
             .clip(RoundedCornerShape(8.dp))
     ) {
         IconButton(
-            onClick = { onDecrement(value - 1) },
-            enabled = value > min
+            onClick = { onDecrement(value - 1); Log.d("Decrement Button", "Pressed on decrement $value")},
+            enabled = true
         ) {
             Icon(imageVector = Minus, contentDescription = "Decrease")
         }
@@ -58,7 +59,7 @@ fun NumericCounter(
 
         IconButton(
             onClick = { if (value < max) onIncrement(value + 1) },
-            enabled = value < max
+            enabled = true
         ) {
             Icon(imageVector = Icons.Default.Add,
                 contentDescription = "Increase",

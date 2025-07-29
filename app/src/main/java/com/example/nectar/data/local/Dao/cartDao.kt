@@ -13,6 +13,11 @@ interface cartDao {
     fun getAllCartItems(): Flow<List<CartItem>>
     @Query("SELECT * FROM cart WHERE productId == :id")  //The choice of adding this function
     fun observeCartItem(id:Int): Flow<CartItem?>
+
+    @Query("DELETE FROM cart")
+    suspend fun emptyCart()
+
+
     @Query("SELECT * FROM cart WHERE productId == :id ")
     suspend fun getSpecificCartItem(id:Int): CartItem?
     @Insert

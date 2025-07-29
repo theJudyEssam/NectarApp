@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nectar.domain.model.cart
 import com.example.nectar.domain.model.product
 import com.example.nectar.domain.usecases.DecrementUseCase
+import com.example.nectar.domain.usecases.EmptyCartUseCase
 import com.example.nectar.domain.usecases.GetCartUseCase
 import com.example.nectar.domain.usecases.GetSpecificCartUseCase
 import com.example.nectar.domain.usecases.IncrementUseCase
@@ -31,7 +32,8 @@ class CartViewModel @Inject constructor(
     private val ToggleUseCase: ToggleUseCase,
     private val IncrementUseCase: IncrementUseCase,
     private val DecrementUseCase: DecrementUseCase,
-    private val ObserveCartUseCase: ObserveCartUseCase
+    private val ObserveCartUseCase: ObserveCartUseCase,
+    private val EmptyCartUseCase: EmptyCartUseCase
 ): ViewModel() {
 
     val cart = GetCartUseCase().stateIn(
@@ -49,7 +51,7 @@ class CartViewModel @Inject constructor(
     val cartItemQuantity: StateFlow<Int> = _productId
         .filterNotNull()
         .flatMapLatest { id ->
-            ObserveCartUseCase(id) // This must return a Flow<cart?>
+            ObserveCartUseCase(id)
                 .map { it?.quantity ?: 0 }
         }
         .stateIn(
@@ -58,11 +60,9 @@ class CartViewModel @Inject constructor(
             0
         )
 
-    fun observeCartItemQuantity(productId: Int): Flow<Int> {
-        return ObserveCartUseCase(productId).map { it?.quantity ?: 0 }
-    }
-
-
+//    fun observeCartItemQuantity(productId: Int): Flow<Int> {
+//        return ObserveCartUseCase(productId).map { it?.quantity ?: 0 }
+//    }
 
     val cartItemIds = cart.map {
         items -> items.map {it.productId} }
@@ -86,6 +86,12 @@ class CartViewModel @Inject constructor(
         }
     }
 
+    // this deletes the user cart !! USE WITH CAUTION !!
+    fun EmptyCart(){
+        viewModelScope.launch {
+            EmptyCartUseCase()
+        }
+    }
 
 
 

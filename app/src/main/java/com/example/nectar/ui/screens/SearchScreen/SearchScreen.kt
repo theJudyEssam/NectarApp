@@ -38,6 +38,7 @@ import com.example.nectar.ui.screens.FiltersScreen.FiltersScreen
 import com.example.nectar.ui.screens.FiltersScreen.FiltersViewModel
 import com.example.nectar.ui.theme.NectarTheme
 import kotlinx.coroutines.launch
+import kotlin.contracts.contract
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,29 +49,34 @@ fun SearchScreen(
     filtersViewModel: FiltersViewModel = hiltViewModel()
 ){
 
-    val products by searchViewModel.products.collectAsState()
-    val filterState by filtersViewModel.filterState.collectAsState()
+    val products by searchViewModel.products.collectAsState() // all products
+    val filterState by filtersViewModel.filterState.collectAsState() // filter options that user chose
 
+    // to trigger filter screen visibility
     var showFilters by remember {mutableStateOf(false)}
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
+
     var query by remember {mutableStateOf("")}
 
 
+
+    // "Search Logic"
     var filteredProducts = products.filter { product ->
         val categoryMatch = filterState.selectedCategories.isEmpty() || filterState.selectedCategories.contains(product.productCategory)
         product.productName.contains(query, ignoreCase = true) && categoryMatch
     }
 
-    if(filterState.selectedPrices.contains(PriceFilters.HIGHEST.Name)){
+    if(filterState.selectedPrices.contains(PriceFilters.HIGHEST.Name)  // "the choice of this bad-practiced if statement 💀💀"
+        && filterState.selectedPrices.contains(PriceFilters.LOWEST.Name)){ // if the user chose both
+        // do nothing
+    }
+    else if(filterState.selectedPrices.contains(PriceFilters.HIGHEST.Name)){
         filteredProducts =  filteredProducts.sortedByDescending { it.productPrice }
     }
     else if (filterState.selectedPrices.contains(PriceFilters.LOWEST.Name)){
         filteredProducts = filteredProducts.sortedBy{ it.productPrice }
     }
-
-
-
 
 
     Scaffold(
@@ -82,6 +88,9 @@ fun SearchScreen(
             query = query,
             onQueryChange = {
                 query = it
+            },
+            emptyQuery = {
+                query = ""
             }
             )}
     )
@@ -147,7 +156,8 @@ fun SearchTopBar(
     navController: NavController,
     query: String = "",
     onQueryChange: (String) -> Unit = {},
-    onFiltersClick:()->Unit = {}
+    onFiltersClick:()->Unit = {},
+    emptyQuery : () -> Unit
 ) {
 
     CenterAlignedTopAppBar(
@@ -155,7 +165,8 @@ fun SearchTopBar(
             SearchBar(
                 navController,
                 query,
-                onQueryChange)
+                onQueryChange,
+                emptyQuery)
         },
         actions =
             {

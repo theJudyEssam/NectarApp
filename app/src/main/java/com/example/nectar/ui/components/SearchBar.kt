@@ -43,10 +43,9 @@ import com.example.nectar.ui.theme.WhiteN
 fun SearchBar(
     navController: NavController,
     query: String = "",
-    onQueryChange: (String) -> Unit = {}
+    onQueryChange: (String) -> Unit = {},
+    emptyQuery: () -> Unit
 ){
-
-
 
         TextField(
             value = query,
@@ -75,13 +74,20 @@ fun SearchBar(
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.Clear,
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.clickable(
+                        onClick = {emptyQuery()}
+                    )
                 )
             }
         )
 
 }
 
+
+
+
+// the choice of the "fake search bar"
 @Composable
 fun FakeSearchBar(navController: NavController) {
     Box(

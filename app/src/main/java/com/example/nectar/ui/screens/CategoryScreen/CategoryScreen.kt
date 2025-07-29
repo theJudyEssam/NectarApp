@@ -114,15 +114,15 @@ fun CategoryNavBar(
                 )
             }
         },
-        actions =  {
-            IconButton(onClick = onFiltersClick) {
-                Icon(
-                    imageVector = Icons.Default.Warning,
-                    contentDescription = "Filter",
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        }
+//        actions =  {  // i shall let the filters functionality only in the search screen
+//            IconButton(onClick = onFiltersClick) {
+//                Icon(
+//                    imageVector = Icons.Default.Warning,
+//                    contentDescription = "Filter",
+//                    tint = MaterialTheme.colorScheme.onBackground
+//                )
+//            }
+//        }
 
     )
 }

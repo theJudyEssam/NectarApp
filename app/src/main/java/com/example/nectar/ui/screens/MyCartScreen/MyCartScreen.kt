@@ -2,6 +2,7 @@ package com.example.nectar.ui.screens.MyCartScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,11 +31,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.nectar.R
+import com.example.nectar.domain.model.cart
 import com.example.nectar.ui.components.NumericCounter
 import com.example.nectar.ui.theme.GreenN
 
@@ -67,57 +72,80 @@ fun CartsBody(
 
 
     Box(){
+        if (cart.value.isEmpty()) {
+            EmptyCartBody()
+        }
 
-
+        else{
         LazyColumn(
-            contentPadding = contentPadding
+            contentPadding = contentPadding,
+            horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-           items(cart.value){
-               cartItem ->
 
-//               LaunchedEffect(cartItem.productId) {
-//                   cartViewModel.fetchCartItem(cartItem.productId) }
-//               val quantity by cartViewModel.cartItemQuantity.collectAsState()
-//
+                items(cart.value){
+                        cartItem ->
+
+                    CartItem(
+                        productName = cartItem.product.productName,
+                        productPrice = cartItem.product.productPrice,
+                        productImg = cartItem.product.productImg,
+                        productDetail = cartItem.product.productWeight,
+                        productQuantity = cartItem.quantity,
+                        modifier = Modifier.clickable(
+                            onClick = {navController.navigate("product/${cartItem.product.Id}")}
+                        ),
+                        onIncrement = { cartViewModel.Increment(cartItem.product) },
+                        onDecrement = { cartViewModel.Decrement(cartItem.product) },
+                    )
+                }
+
+                item{
+
+                    Button(
+                        onClick = {
+                            navController.navigate("order_accepted")
+                            cartViewModel.EmptyCart()},
+                        modifier = Modifier
+                            .width(353.dp)
+                            .height(67.dp)
+                            .align(Alignment.BottomCenter)
+                            .padding(4.dp),
+                        shape = RoundedCornerShape(19.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = GreenN
+                        )
+                    ){
+                        Text("Proceed to checkout")
+                    }}
+            }
 
 
-               CartItem(
-                   productName = cartItem.product.productName,
-                   productPrice = cartItem.product.productPrice,
-                   productImg = cartItem.product.productImg,
-                   productDetail = cartItem.product.productWeight,
-                   productQuantity = cartItem.quantity,
-                   modifier = Modifier.clickable(
-                       onClick = {navController.navigate("product/${cartItem.product.Id}")}
-                   ),
-                   onIncrement = { cartViewModel.Increment(cartItem.product) },
-                   onDecrement = { cartViewModel.Decrement(cartItem.product) },
-               )
-           }
+
         }
 
 
-        Button(
-            onClick = {navController.navigate("order_accepted")},
-            modifier = Modifier
-                .width(353.dp)
-                .height(67.dp)
-                .align(Alignment.BottomCenter)
-                .padding(4.dp),
-            shape = RoundedCornerShape(19.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = GreenN
-            )
-        ){
-            Text("Proceed to checkout")
-        }
     }
-
-
-
-
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EmptyCartBody(){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ){
+
+        Icon(
+            painter = painterResource(R.drawable.baseline_remove_shopping_cart_24),
+            contentDescription = "Empty Cart"
+        )
+
+        Text("You forgot something?")
+
+    }
+}
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)

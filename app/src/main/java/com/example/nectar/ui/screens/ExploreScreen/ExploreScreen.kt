@@ -72,6 +72,7 @@ fun ExploreBody(
             ExploreItem(
                 Category = category.Name,
                 color = category.Color,
+                imageSrc = category.ImgSrc,
                 modifier = Modifier.clickable(onClick = {navController.navigate("categories/${category.Name}")}))
         }
     }

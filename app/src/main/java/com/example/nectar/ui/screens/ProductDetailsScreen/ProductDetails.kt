@@ -50,7 +50,6 @@ fun ProductDetailsScreen(
 
 
 
-
     ProductBody(
         productURL = product.productImg,
         productNutrition = product.productNutrition,
@@ -108,7 +107,7 @@ fun ProductBody(
                 .padding(4.dp),
             shape = RoundedCornerShape(19.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = GreenN // or any other Color
+                containerColor = GreenN
             )
         ){
             Text(
@@ -155,6 +154,7 @@ fun ProductInfo(
             ProductPriceSection(
                 productPrice,
                 onIncrement = onIncrement,
+                onDecrement = onDecrement,
                 quantity = quantity)
         }
         item{ ProductDetailsSections(modifier,productDescription) }

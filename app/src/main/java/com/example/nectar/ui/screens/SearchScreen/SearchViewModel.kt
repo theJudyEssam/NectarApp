@@ -19,22 +19,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val SearchProductUseCase: SearchProductUseCase,
     private val GetProductsUseCase: GetProductsUseCase
 ): ViewModel() {
 
-
-
-    var _queryState = MutableStateFlow<String>(Categories.BEVERAGES.Name)
-    val categoryState: StateFlow<String> get() =_queryState
+//    var _queryState = MutableStateFlow<String>(Categories.BEVERAGES.Name)
+//    val categoryState: StateFlow<String> get() =_queryState
 
     val products = GetProductsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
         initialValue = emptyList()
     )
-
-
-
-
 }

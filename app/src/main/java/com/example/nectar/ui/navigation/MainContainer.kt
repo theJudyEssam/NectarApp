@@ -84,7 +84,7 @@ fun MainContainer(
                 arguments = listOf(navArgument("category"){type = NavType.StringType})
             ){
                 val category = it.arguments?.getString("category")?:""
-                CategoryScreen(category, navController)
+                CategoryScreen(category, navController, navigateBack = {navController.navigateUp()})
             }
 
             composable(
@@ -94,7 +94,7 @@ fun MainContainer(
                 }))
             {
                 val productId = it.arguments?.getInt("productId")?:0
-                ProductDetailsScreen(productId = productId)
+                ProductDetailsScreen(productId = productId,  onBackClick = {navController.navigateUp()})
 
             }
 

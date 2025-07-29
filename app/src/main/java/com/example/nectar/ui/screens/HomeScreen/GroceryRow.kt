@@ -53,6 +53,7 @@ fun GroceriesRow(
             items(Categories.entries) { category ->
                 GrocerieRowItem(text = category.Name,
                     color = category.Color,
+                    img = category.ImgSrc,
                     onClick = {navController.navigate("categories/${category.Name}")})
             }}
 
@@ -69,6 +70,7 @@ fun GroceriesRow(
 @Composable
 fun GrocerieRowItem(
     color: Color = Color(0xFFF8A44C),
+    img:Int,
     text: String = "Grocery",
     onClick: () -> Unit
 ){
@@ -85,7 +87,7 @@ fun GrocerieRowItem(
 
         ){
         Image(
-            painter = painterResource(R.drawable.group__1_),
+            painter = painterResource(img),
             contentDescription = null,
             modifier = Modifier
                 .width(60.dp)

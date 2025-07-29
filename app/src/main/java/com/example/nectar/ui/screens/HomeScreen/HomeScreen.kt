@@ -42,9 +42,9 @@ import com.example.nectar.ui.theme.NectarTheme
 
 
 val imageUrls = listOf(
-    "https://picsum.photos/800/300?1",
-    "https://picsum.photos/800/300?2",
-    "https://picsum.photos/800/300?3"
+    R.drawable.img_banner1,
+    R.drawable.img_banner2,
+    R.drawable.img_banner3
 )
 
 
@@ -108,15 +108,15 @@ fun HomeBody(
 
 
 @Composable
-fun BannerSlider(images: List<String>) {
+fun BannerSlider(images: List<Int>) {
     val pagerState = rememberPagerState(pageCount = { images.size })
 
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
-            .padding(horizontal = 16.dp)
+            .height(100.dp)
+            .padding(horizontal = 8.dp)
     ) { page ->
         val imageUrl = images[page]
 
@@ -124,12 +124,12 @@ fun BannerSlider(images: List<String>) {
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(15.dp))
-                .background(Color.LightGray) // fallback background in case image fails
+               // fallback background in case image fails
         ) {
             Image(
-                painter = rememberAsyncImagePainter(imageUrl),
+                painter = painterResource(imageUrl),
                 contentDescription = "Slide $page",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()
             )
         }

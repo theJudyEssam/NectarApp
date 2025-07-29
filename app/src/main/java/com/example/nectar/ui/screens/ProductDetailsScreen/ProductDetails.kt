@@ -8,10 +8,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,7 +44,8 @@ import com.example.nectar.ui.theme.NectarTheme
 fun ProductDetailsScreen(
     productId: Int,
     ProductDetailsviewModel: ProductsDetailsViewModel = hiltViewModel(),
-    CartViewModel: CartViewModel = hiltViewModel()
+    CartViewModel: CartViewModel = hiltViewModel(),
+    onBackClick: () -> Unit = {}
 ){
 
     LaunchedEffect(productId) {
@@ -49,19 +57,28 @@ fun ProductDetailsScreen(
     val quantity by CartViewModel.cartItemQuantity.collectAsState()
 
 
+    Scaffold(
+        topBar = { ProductNavBar(onBackClick = onBackClick) }
+    ){
+        innerPadding ->
 
-    ProductBody(
-        productURL = product.productImg,
-        productNutrition = product.productNutrition,
-        productName = product.productName,
-        productDetails = product.productWeight,
-        productDescription = product.productDescription,
-        productPrice = product.productPrice,
-        onAddCart = {CartViewModel.ToggleCartItem(product)},
-        onIncrement = {CartViewModel.Increment(product)},
-        onDecrement = {CartViewModel.Decrement(product)},
-        CartQuantity = quantity
-    )
+        ProductBody(
+            modifier = Modifier.padding(innerPadding),
+            productURL = product.productImg,
+            productNutrition = product.productNutrition,
+            productName = product.productName,
+            productDetails = product.productWeight,
+            productDescription = product.productDescription,
+            productPrice = product.productPrice,
+            onAddCart = {CartViewModel.ToggleCartItem(product)},
+            onIncrement = {CartViewModel.Increment(product)},
+            onDecrement = {CartViewModel.Decrement(product)},
+            CartQuantity = quantity
+        )
+
+    }
+
+
 }
 
 
@@ -172,9 +189,24 @@ fun ProductInfo(
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductNavBar(){
+fun ProductNavBar(
+    onBackClick: () -> Unit
+){
+    TopAppBar(
+        title = {},
+        navigationIcon = {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
 
+    )
 }
 
 

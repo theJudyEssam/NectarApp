@@ -36,6 +36,7 @@ import com.example.nectar.ui.screens.MyCartScreen.CartViewModel
 fun CategoryScreen(
     categoryTitle: String,
     navController: NavController,
+    navigateBack: () -> Unit = {},
     categoryViewModel: CategoryScreenViewModel= hiltViewModel(),
     cartViewModel: CartViewModel = hiltViewModel()
 ){
@@ -46,7 +47,7 @@ fun CategoryScreen(
     val cartItemIds by cartViewModel.cartItemIds.collectAsState()
 
     Scaffold(
-        topBar = { CategoryNavBar(categoryTitle = categoryTitle) }
+        topBar = { CategoryNavBar(categoryTitle = categoryTitle, onBackClick = navigateBack) }
     ) { innerPadding ->
         CategoryBody(modifier = Modifier.padding(horizontal = 8.dp),
             contentPadding = innerPadding,
@@ -98,7 +99,6 @@ fun CategoryBody(
 fun CategoryNavBar(
     categoryTitle:String = "Category",
     onBackClick:()->Unit = {},
-    onFiltersClick:()-> Unit = {}
 ){
 
     CenterAlignedTopAppBar(

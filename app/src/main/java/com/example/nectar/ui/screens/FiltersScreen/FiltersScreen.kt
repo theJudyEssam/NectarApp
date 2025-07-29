@@ -40,7 +40,8 @@ import com.example.nectar.ui.theme.GreenN
 
 @Composable
 fun FiltersScreen(
-    filtersViewModel: FiltersViewModel = hiltViewModel()
+    filtersViewModel: FiltersViewModel = hiltViewModel(),
+    navigateBack: () -> Unit = {}
 ){
 
     val categoriesFilter = remember { mutableStateOf(setOf<String>()) }
@@ -48,7 +49,7 @@ fun FiltersScreen(
 
 
     Scaffold(
-        topBar = { FiltersNavBar() }
+        topBar = { FiltersNavBar(onBackClick = navigateBack) }
     ) {
         innerPadding -> FilterBody(
         modifier = Modifier.padding(innerPadding),

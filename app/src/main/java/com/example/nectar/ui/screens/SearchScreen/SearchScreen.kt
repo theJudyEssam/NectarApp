@@ -107,7 +107,7 @@ fun SearchScreen(
                 sheetState = sheetState,
                 modifier = Modifier.fillMaxHeight()
             ) {
-                FiltersScreen()
+                FiltersScreen(navigateBack = {navController.navigateUp()})
             }
         }
 

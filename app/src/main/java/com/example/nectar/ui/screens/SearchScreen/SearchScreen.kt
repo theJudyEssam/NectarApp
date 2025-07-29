@@ -30,10 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.nectar.PriceFilters
 import com.example.nectar.domain.model.product
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.components.SearchBar
 import com.example.nectar.ui.screens.FiltersScreen.FiltersScreen
+import com.example.nectar.ui.screens.FiltersScreen.FiltersViewModel
 import com.example.nectar.ui.theme.NectarTheme
 import kotlinx.coroutines.launch
 
@@ -42,19 +44,32 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     navController: NavController,
-    viewModel: SearchViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel = hiltViewModel(),
+    filtersViewModel: FiltersViewModel = hiltViewModel()
 ){
 
-    val products by viewModel.products.collectAsState()
+    val products by searchViewModel.products.collectAsState()
+    val filterState by filtersViewModel.filterState.collectAsState()
+
     var showFilters by remember {mutableStateOf(false)}
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
     var query by remember {mutableStateOf("")}
 
 
-    val filteredProducts = products.filter {
-        it.productName.contains(query, ignoreCase = true)
+    var filteredProducts = products.filter { product ->
+        val categoryMatch = filterState.selectedCategories.isEmpty() || filterState.selectedCategories.contains(product.productCategory)
+        product.productName.contains(query, ignoreCase = true) && categoryMatch
     }
+
+    if(filterState.selectedPrices.contains(PriceFilters.HIGHEST.Name)){
+        filteredProducts =  filteredProducts.sortedByDescending { it.productPrice }
+    }
+    else if (filterState.selectedPrices.contains(PriceFilters.LOWEST.Name)){
+        filteredProducts = filteredProducts.sortedBy{ it.productPrice }
+    }
+
+
 
 
 

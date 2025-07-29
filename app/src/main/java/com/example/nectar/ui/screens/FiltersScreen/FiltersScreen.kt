@@ -3,9 +3,7 @@ package com.example.nectar.ui.screens.FiltersScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -22,27 +20,44 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.nectar.Categories
 import com.example.nectar.PriceFilters
 import com.example.nectar.ui.components.FilterCheckbox
+import com.example.nectar.ui.components.toggle
 import com.example.nectar.ui.theme.Gilroy
 import com.example.nectar.ui.theme.GreenN
 
 @Composable
-fun FiltersScreen(){
+fun FiltersScreen(
+    filtersViewModel: FiltersViewModel = hiltViewModel()
+){
+
+    val categoriesFilter = remember { mutableStateOf(setOf<String>()) }
+    val pricesFilter = remember { mutableStateOf(setOf<String>()) }
+
+
     Scaffold(
         topBar = { FiltersNavBar() }
     ) {
-        innerPadding -> FilterBody(modifier = Modifier.padding(innerPadding))
+        innerPadding -> FilterBody(
+        modifier = Modifier.padding(innerPadding),
+        filtersViewModel,
+            categoriesFilter.value,
+            pricesFilter.value,
+            onCategoryChange = {category -> categoriesFilter.value = categoriesFilter.value.toggle(category)},
+            onPriceChange = {category -> pricesFilter.value = pricesFilter.value.toggle(category)}
+        )
     }
 
 }
@@ -50,31 +65,42 @@ fun FiltersScreen(){
 
 @Composable
 fun FilterBody(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    filtersViewModel: FiltersViewModel,
+    categoryFilter: Set<String>,
+    priceFilters: Set<String>,
+    onCategoryChange: (String) ->Unit,
+    onPriceChange: (String)-> Unit
 ){
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(color = Color(0xFFF2F3F2), shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-            .padding(horizontal = 16.dp), 
+            .padding(horizontal = 16.dp),
 
         verticalArrangement = Arrangement.Center
 
     ){
 
-        CategoriesSection()
-        PricesSection()
+        CategoriesSection(categoryFilter = categoryFilter, onCategoryChange = onCategoryChange)
+        PricesSection(priceFilters = priceFilters, onPriceChange = onPriceChange)
 
         Button(
-            onClick = {},
+            onClick = {
+                filtersViewModel.setFilterState(
+                    FiltersState(
+                    categoryFilter,
+                    priceFilters)
+                )
+            },
             modifier = modifier
                 .width(353.dp)
                 .height(67.dp)
                 .align(Alignment.CenterHorizontally),
             shape = RoundedCornerShape(19.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = GreenN // or any other Color
+                containerColor = GreenN
             )
         ) {
             Text("Apply Filter")
@@ -85,7 +111,9 @@ fun FilterBody(
 
 @Composable
 fun CategoriesSection(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    categoryFilter: Set<String>,
+    onCategoryChange: (String) -> Unit
 ){
 
     Column(
@@ -100,13 +128,18 @@ fun CategoriesSection(
             )
         )
         for (categories in Categories.entries) {
-            FilterCheckbox(categories.Name)
+            FilterCheckbox(categories.Name,
+                categoryFilter.contains(categories.Name),
+                onCategoryChange)
         }
     }
 }
 
 @Composable
-fun PricesSection(){
+fun PricesSection(
+    priceFilters: Set<String>,
+    onPriceChange: (String)->Unit
+){
 
     Column(){
         Text("Price Range",
@@ -118,10 +151,11 @@ fun PricesSection(){
             )
         )
         for (prices in PriceFilters.entries) {
-            FilterCheckbox(prices.Name)
+            FilterCheckbox(prices.Name,
+                priceFilters.contains(prices.Name),
+                onPriceChange)
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

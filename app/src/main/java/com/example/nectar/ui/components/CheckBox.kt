@@ -11,11 +11,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 
+fun <T> Set<T>.toggle(item:T): Set<T> {
+    return if(contains(item)) this-item else this+item
+}
+
+
 @Composable
 fun FilterCheckbox(
-    name:String
+    name:String,
+    checked : Boolean,
+    onChecked : (String) -> Unit
 ){
-    var checked by remember { mutableStateOf(false) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -26,7 +32,7 @@ fun FilterCheckbox(
         )
         Checkbox(
             checked = checked,
-            onCheckedChange = { checked = it }
+            onCheckedChange = { onChecked(name) }
         )
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -71,9 +72,10 @@ fun CartsBody(
     val cart = cartViewModel.cart.collectAsState()
 
 
-    Box(){
+    Box(modifier = modifier.fillMaxSize()){
         if (cart.value.isEmpty()) {
-            EmptyCartBody()
+            EmptyCartBody(modifier = Modifier.fillMaxSize() // Pass modifier to EmptyCartBody
+            )
         }
 
         else{
@@ -130,8 +132,11 @@ fun CartsBody(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmptyCartBody(){
+fun EmptyCartBody(
+    modifier: Modifier = Modifier
+){
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){

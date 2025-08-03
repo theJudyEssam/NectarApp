@@ -169,15 +169,15 @@ fun FiltersNavBar(
             Text("Filters",
                  style = MaterialTheme.typography.titleMedium)
         },
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        }
+//        navigationIcon = {
+//            IconButton(onClick = onBackClick) {
+//                Icon(
+//                    imageVector = Icons.Default.ArrowBack,
+//                    contentDescription = "Back",
+//                    tint = MaterialTheme.colorScheme.onBackground
+//                )
+//            }
+//        }
     )
 }
 

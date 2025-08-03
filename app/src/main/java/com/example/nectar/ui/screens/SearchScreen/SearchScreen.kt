@@ -19,6 +19,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,16 +27,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.nectar.PriceFilters
+import com.example.nectar.R
 import com.example.nectar.domain.model.product
 import com.example.nectar.ui.components.ProductViewItem
 import com.example.nectar.ui.components.SearchBar
 import com.example.nectar.ui.screens.FiltersScreen.FiltersScreen
 import com.example.nectar.ui.screens.FiltersScreen.FiltersViewModel
+import com.example.nectar.ui.screens.MyCartScreen.CartViewModel
 import com.example.nectar.ui.theme.NectarTheme
 import kotlinx.coroutines.launch
 import kotlin.contracts.contract
@@ -46,8 +50,10 @@ import kotlin.contracts.contract
 fun SearchScreen(
     navController: NavController,
     searchViewModel: SearchViewModel = hiltViewModel(),
-    filtersViewModel: FiltersViewModel = hiltViewModel()
-){
+    filtersViewModel: FiltersViewModel = hiltViewModel(),
+    CartViewModel: CartViewModel = hiltViewModel(),
+    ){
+
 
     val products by searchViewModel.products.collectAsState() // all products
     val filterState by filtersViewModel.filterState.collectAsState() // filter options that user chose
@@ -98,7 +104,8 @@ fun SearchScreen(
         innerPadding ->
         SearchBody(navController, filteredProducts,
             modifier = Modifier.padding(8.dp),
-            contentPadding = innerPadding)
+            contentPadding = innerPadding,
+            cartViewModel = CartViewModel)
 
 
         if (showFilters){
@@ -107,7 +114,7 @@ fun SearchScreen(
                 sheetState = sheetState,
                 modifier = Modifier.fillMaxHeight()
             ) {
-                FiltersScreen(navigateBack = {navController.navigateUp()})
+                FiltersScreen(navigateBack = {navController.navigate("search")})
             }
         }
 
@@ -121,7 +128,8 @@ fun SearchBody(
     navController: NavController,
     products:List<product> = emptyList<product>(),
     modifier:Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues()
+    contentPadding: PaddingValues = PaddingValues(),
+    cartViewModel: CartViewModel
 ){
 
     LazyVerticalGrid(
@@ -132,6 +140,14 @@ fun SearchBody(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(products){ product ->
+
+            LaunchedEffect(product.Id) {
+                cartViewModel.fetchCartItem(product.Id)
+            }
+
+            val cartItemIds by cartViewModel.cartItemIds.collectAsState()
+
+
             ProductViewItem(
                 title = product.productName,
                 image = product.productImg,
@@ -139,7 +155,10 @@ fun SearchBody(
                 price = product.productPrice,
                 modifier = Modifier.clickable(
                     onClick = { navController.navigate("product/${product.Id}") }
-                )
+                ),
+                addCart = {cartViewModel.ToggleCartItem(product)},
+                isInCart =  cartItemIds.contains(product.Id)
+
             )
         }
     }
@@ -172,7 +191,7 @@ fun SearchTopBar(
             {
                 IconButton(onClick = { onFiltersClick() }) {
                     Icon(
-                        imageVector = Icons.Default.Warning,
+                        painter = painterResource(R.drawable.filter),
                         contentDescription = "Filter",
                         tint = MaterialTheme.colorScheme.onBackground
                     )

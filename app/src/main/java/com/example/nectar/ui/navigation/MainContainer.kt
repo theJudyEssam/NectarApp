@@ -12,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.nectar.SplashScreen
 import com.example.nectar.ui.screens.CategoryScreen.CategoryScreen
 import com.example.nectar.ui.screens.ExploreScreen.ExploreScreen
 import com.example.nectar.ui.screens.HomeScreen.HomeScreen
@@ -27,8 +28,12 @@ fun AppNavigation(navController: NavHostController){
 
     NavHost(
         navController = navController,
-        startDestination = "onboarding"
+        startDestination = "splash"
     ){
+        composable("splash"){
+            SplashScreen(navController)
+        }
+
         composable("onboarding"){
              OnBoardingScreen(
                  onClick = {navController.navigate("main")}

@@ -25,22 +25,13 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
+
+    bodySmall = TextStyle(
+        fontFamily = Gilroy,
         fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+        fontSize = 16.sp
+    ),
+
 
     labelMedium = TextStyle(
         fontFamily = Gilroy,
@@ -84,17 +75,12 @@ val Typography = Typography(
         fontSize = 16.sp,
         textAlign = TextAlign.Center
     ),
-    /*font-family: Gilroy;
-font-weight: 600;
-font-size: 24px;
-leading-trim: NONE;
-line-height: 100%;
-letter-spacing: 0%;
-*/
+
     displayMedium = TextStyle(
         fontFamily = Gilroy,
-        fontWeight = FontWeight.W600,
-        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        lineHeight = 100.sp
     )
 
 )

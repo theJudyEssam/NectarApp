@@ -2,6 +2,7 @@ package com.example.nectar.ui.screens.HomeScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,29 +23,44 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.nectar.Categories
 import com.example.nectar.R
+import com.example.nectar.domain.model.product
+import com.example.nectar.ui.screens.MyCartScreen.CartViewModel
 import com.example.nectar.ui.theme.Gilroy
 
 
 @Composable
-fun GroceriesRow(){
+fun GroceriesRow(
+    navController: NavController,
+    title:String = "title",
+    products: List<product>,
+    cartItemsId: List<Int>,
+    cartViewModel: CartViewModel
+){
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(16.dp)
     ){
-        CategoryTitle()
+        CategoryTitle(text = title)
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp), // gap between items
-            contentPadding = PaddingValues(horizontal = 16.dp),   // optional padding on both sides
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(10) { index ->
-                GrocerieRowItem()
+            items(Categories.entries) { category ->
+                GrocerieRowItem(text = category.Name,
+                    color = category.Color,
+                    img = category.ImgSrc,
+                    onClick = {navController.navigate("categories/${category.Name}")})
             }}
 
-        CategoryItems()
+        CategoryItems(navController,
+            products,
+            cartItemsId,
+            cartViewModel)
     }
 
 
@@ -53,7 +70,9 @@ fun GroceriesRow(){
 @Composable
 fun GrocerieRowItem(
     color: Color = Color(0xFFF8A44C),
-    text: String = "Grocery"
+    img:Int,
+    text: String = "Grocery",
+    onClick: () -> Unit
 ){
     Row(
 
@@ -61,20 +80,23 @@ fun GrocerieRowItem(
             .background(color = color.copy(alpha = 0.3f), shape = RoundedCornerShape(17.dp))
             .width(248.19.dp)
             .height(105.dp)
+            .clickable(onClick = onClick)
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
 
         ){
         Image(
-            painter = painterResource(R.drawable.group__1_),
+            painter = painterResource(img),
             contentDescription = null,
             modifier = Modifier
-                .width(70.dp)
-                .height(70.dp)
+                .width(60.dp)
+                .height(60.dp)
+                .padding(4.dp)
         )
 
         Text(text,
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             fontFamily = Gilroy,
             fontWeight = FontWeight.W600
         )

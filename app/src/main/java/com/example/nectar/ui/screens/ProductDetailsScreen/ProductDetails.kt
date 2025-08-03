@@ -1,10 +1,7 @@
 package com.example.nectar.ui.screens.ProductDetailsScreen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,44 +9,76 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.nectar.data.model.Nutrition
+import com.example.nectar.ui.screens.MyCartScreen.CartViewModel
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductDetailsSections
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductNameSection
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductNutritionSection
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductPriceSection
 import com.example.nectar.ui.screens.ProductDetailsScreen.Sections.ProductReviewSection
-import com.example.nectar.ui.theme.Gilroy
 import com.example.nectar.ui.theme.GreenN
 import com.example.nectar.ui.theme.NectarTheme
 
 
 @Composable
 fun ProductDetailsScreen(
-    modifier: Modifier = Modifier
+    productId: Int,
+    ProductDetailsviewModel: ProductsDetailsViewModel = hiltViewModel(),
+    CartViewModel: CartViewModel = hiltViewModel(),
+    onBackClick: () -> Unit = {}
 ){
 
-    ProductBody()
+    LaunchedEffect(productId) {
+        ProductDetailsviewModel.fetchProduct(productId)
+        CartViewModel.fetchCartItem(productId)
+    }
+
+    val product = ProductDetailsviewModel.product.collectAsState().value
+    val quantity by CartViewModel.cartItemQuantity.collectAsState()
+
+
+    Scaffold(
+        topBar = { ProductNavBar(onBackClick = onBackClick) }
+    ){
+        innerPadding ->
+
+        ProductBody(
+            modifier = Modifier.padding(innerPadding),
+            productURL = product.productImg,
+            productNutrition = product.productNutrition,
+            productName = product.productName,
+            productDetails = product.productWeight,
+            productDescription = product.productDescription,
+            productPrice = product.productPrice,
+            onAddCart = {CartViewModel.ToggleCartItem(product)},
+            onIncrement = {CartViewModel.Increment(product)},
+            onDecrement = {CartViewModel.Decrement(product)},
+            CartQuantity = quantity
+        )
+
+    }
+
+
 }
 
 
@@ -61,10 +90,15 @@ fun ProductBody(
     productDetails: String = "13, price",
     productDescription: String = "Apples are nutritious. Apples may be good for weight loss. apples may be good for your heart. As part of a healtful and varied diet.",
     productReview:Int = 4,
-    productNutrition: Map<String, String> = emptyMap(),
+    productNutrition: Nutrition,
     productPrice: Float = 0.0f,
-    onAddCart: () -> Unit = {}
+    onAddCart: () -> Unit = {},
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
+    CartQuantity: Int
 ){
+
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -76,24 +110,26 @@ fun ProductBody(
             productURL,
             productDetails,
             productNutrition,
-            productDescription
+            productDescription,
+            onIncrement,
+            onDecrement,
+            CartQuantity
         )
 
         Button(
-            onClick = {},
+            onClick = {onAddCart},
             modifier = modifier
                 .width(353.dp)
                 .height(67.dp)
                 .padding(4.dp),
             shape = RoundedCornerShape(19.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = GreenN // or any other Color
+                containerColor = GreenN
             )
         ){
             Text(
                 "Add to Basket",
                 style = MaterialTheme.typography.labelMedium,
-//              //  modifier = modifier.padding(16.dp)
             )
         }
     }
@@ -109,8 +145,11 @@ fun ProductInfo(
     productReview: Int,
     productURL: String,
     productDetails: String,
-    productNutrition: Map<String, String>,
+    productNutrition: Nutrition,
     productDescription: String,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
+    quantity: Int,
     modifier: Modifier = Modifier
 ){
 
@@ -129,12 +168,16 @@ fun ProductInfo(
         }
 
         item{
-            ProductPriceSection(productPrice)
+            ProductPriceSection(
+                productPrice,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                quantity = quantity)
         }
         item{ ProductDetailsSections(modifier,productDescription) }
 
         item{
-            ProductNutritionSection()
+            ProductNutritionSection(productNutrition = productNutrition)
         }
         item{
             ProductReviewSection(rating = productReview)
@@ -146,9 +189,24 @@ fun ProductInfo(
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductNavBar(){
+fun ProductNavBar(
+    onBackClick: () -> Unit
+){
+    TopAppBar(
+        title = {},
+        navigationIcon = {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
 
+    )
 }
 
 
@@ -158,6 +216,5 @@ fun ProductNavBar(){
 @Composable
 fun ProductScreenPreview(){
     NectarTheme {
-        ProductDetailsScreen()
     }
 }

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -44,32 +45,43 @@ class CartViewModel @Inject constructor(
         emptyList()
     )
 
+
+    val total_price: StateFlow<Float> = cart.map { cartLists ->
+        cartLists.sumOf { cartItem ->
+            (cartItem.product.productPrice * cartItem.quantity).toDouble()
+        }.toFloat()
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        0f
+    )
+
     private val _productId = MutableStateFlow<Int?>(null)
     val productId: StateFlow<Int?> = _productId
 
     fun fetchCartItem(id:Int){
         _productId.value = id
     }
-val cartItemQuantity: StateFlow<Int> = _productId
-    .filterNotNull()
-    .flatMapLatest { id ->
-        ObserveCartUseCase(id)
-            .map { it?.quantity ?: 0 }
-    }
+    val cartItemQuantity: StateFlow<Int> = _productId
+        .filterNotNull()
+        .flatMapLatest { id ->
+            ObserveCartUseCase(id)
+                .map { it?.quantity ?: 0 }
+        }
     .stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
         0
     )
 
-//    fun observeCartItemQuantity(productId: Int): Flow<Int> {
-//        return ObserveCartUseCase(productId).map { it?.quantity ?: 0 }
-//    }
-
     val cartItemIds = cart.map {
             items -> items.map {it.productId} }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+
+    val finalTotal: StateFlow<List<Float>> = cart.map {
+        cartItems -> cartItems.map { it.product.productPrice * it.quantity }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun ToggleCartItem(product: product){
         viewModelScope.launch {
@@ -99,8 +111,11 @@ val cartItemQuantity: StateFlow<Int> = _productId
         viewModelScope.launch {
             DeleteCartUseCase(cart)
         }
-
     }
+
+
+
+
 
 
 

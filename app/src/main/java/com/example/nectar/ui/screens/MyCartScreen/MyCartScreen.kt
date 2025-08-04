@@ -1,6 +1,7 @@
 package com.example.nectar.ui.screens.MyCartScreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,10 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,12 +35,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.nectar.R
 import com.example.nectar.domain.model.cart
@@ -47,13 +53,16 @@ import com.example.nectar.ui.theme.GreenN
 
 @Composable
 fun CartsScreen(
-    navController: NavController
+    navController: NavController,
+    parentNavController: NavHostController
 ){
     Scaffold(
+        contentWindowInsets = WindowInsets(0),
         topBar = {CartNavBar()}
     ) {
         innerPadding ->
         CartsBody(navController,
+            parentNavController,
             modifier = Modifier.padding(innerPadding),
           //  contentPadding = innerPadding,
             cartViewModel = hiltViewModel()
@@ -64,14 +73,17 @@ fun CartsScreen(
 @Composable
 fun CartsBody(
     navController: NavController,
+    parentNavController: NavHostController,
     modifier: Modifier = Modifier,
    // contentPadding: PaddingValues = PaddingValues(),
     cartViewModel: CartViewModel
 ){
 
     val cart = cartViewModel.cart.collectAsState()
+    val total_price = cartViewModel.total_price.collectAsState()
 
 
+    //todo add cart screen state
     Box(modifier = modifier.fillMaxSize()){
         if (cart.value.isEmpty()) {
             EmptyCartBody(modifier = Modifier.fillMaxSize() // Pass modifier to EmptyCartBody
@@ -83,13 +95,12 @@ fun CartsBody(
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-
                 items(cart.value){
                         cartItem ->
 
                     CartItem(
                         productName = cartItem.product.productName,
-                        productPrice = cartItem.product.productPrice,
+                        productPrice = (cartItem.product.productPrice * cartItem.quantity),
                         productImg = cartItem.product.productImg,
                         productDetail = cartItem.product.productWeight,
                         productQuantity = cartItem.quantity,
@@ -106,7 +117,7 @@ fun CartsBody(
 
                     Button(
                         onClick = {
-                            navController.navigate("order_accepted")
+                            parentNavController.navigate("order_accepted")
                             cartViewModel.EmptyCart()},
                         modifier = Modifier
                             .width(353.dp)
@@ -119,6 +130,18 @@ fun CartsBody(
                         )
                     ){
                         Text("Proceed to checkout")
+
+                        Spacer(Modifier.weight(1f))
+                        Text(
+                            "${total_price.value}",
+                            modifier= Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color(0xFF489E67))
+                                .padding(4.dp)
+
+                        )
+
+
                     }}
             }
 

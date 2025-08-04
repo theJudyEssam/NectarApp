@@ -40,6 +40,8 @@ import com.example.nectar.ui.theme.GreenN
 import com.example.nectar.ui.theme.NectarTheme
 
 
+//todo add share intent in application
+
 @Composable
 fun ProductDetailsScreen(
     productId: Int,

@@ -25,7 +25,6 @@ import com.example.nectar.ui.screens.SearchScreen.SearchScreen
 @Composable
 fun AppNavigation(navController: NavHostController){
 
-
     NavHost(
         navController = navController,
         startDestination = "splash"
@@ -35,32 +34,32 @@ fun AppNavigation(navController: NavHostController){
         }
 
         composable("onboarding"){
-             OnBoardingScreen(
-                 onClick = {navController.navigate("main")}
-             )
+            OnBoardingScreen(
+                onClick = {navController.navigate("main")}
+            )
         }
+
         composable("main"){
-            MainContainer()
+            MainContainer(parentNavController = navController)
         }
 
-
-
-
+        // Move order_accepted here so it's outside the MainContainer (no bottom bar)
+        composable("order_accepted"){
+            OrderAcceptedScreen(navController)
+        }
     }
 }
 
-
-
 @Composable
 fun MainContainer(
+    parentNavController: NavHostController // Pass the parent nav controller
 ){
-
     val navController = rememberNavController()
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ){
-        innerPadding ->
+            innerPadding ->
 
         NavHost(
             navController = navController,
@@ -68,22 +67,19 @@ fun MainContainer(
             modifier = Modifier.padding(innerPadding),
         )
         {
-
             composable("home") {
-                HomeScreen(navController =  navController)
+                HomeScreen(navController = navController)
             }
 
-            // route : search
             composable("explore") {
                 ExploreScreen(navController = navController)
             }
 
-            // route : cart
             composable("cart") {
-                CartsScreen(navController = navController)
+                // Pass the parent nav controller to navigate to order_accepted
+                CartsScreen(navController = navController,parentNavController = parentNavController)
             }
 
-            //route : categories
             composable(
                 route = "categories/{category}",
                 arguments = listOf(navArgument("category"){type = NavType.StringType})
@@ -99,24 +95,12 @@ fun MainContainer(
                 }))
             {
                 val productId = it.arguments?.getInt("productId")?:0
-                ProductDetailsScreen(productId = productId,  onBackClick = {navController.navigateUp()})
-
+                ProductDetailsScreen(productId = productId, onBackClick = {navController.navigateUp()})
             }
 
             composable("search") {
                 SearchScreen(navController)
             }
-
-
-            composable("order_accepted"){
-                OrderAcceptedScreen(navController)
-            }
-
-
-
         }
-
     }
-
-
 }

@@ -47,7 +47,7 @@ fun OrderAcceptedScreen(
         )
 
         OrderAcceptedContent(
-            onClick = {navController.navigate("home")},
+            onClick = {navController.navigate("main")},
             modifier = Modifier.align(Alignment.BottomStart)
         )
 

@@ -55,7 +55,7 @@ fun CartsScreen(
         innerPadding ->
         CartsBody(navController,
             modifier = Modifier.padding(innerPadding),
-            contentPadding = innerPadding,
+          //  contentPadding = innerPadding,
             cartViewModel = hiltViewModel()
             )
     }
@@ -65,7 +65,7 @@ fun CartsScreen(
 fun CartsBody(
     navController: NavController,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(),
+   // contentPadding: PaddingValues = PaddingValues(),
     cartViewModel: CartViewModel
 ){
 
@@ -80,7 +80,6 @@ fun CartsBody(
 
         else{
         LazyColumn(
-            contentPadding = contentPadding,
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
@@ -99,6 +98,7 @@ fun CartsBody(
                         ),
                         onIncrement = { cartViewModel.Increment(cartItem.product) },
                         onDecrement = { cartViewModel.Decrement(cartItem.product) },
+                        DeleteItem = { cartViewModel.DeleteItem(cartItem)}
                     )
                 }
 
@@ -178,6 +178,7 @@ fun CartItem(
     productPrice: Float = 4.99f,
     onIncrement: (Int) -> Unit,
     onDecrement: (Int) -> Unit,
+    DeleteItem: () -> Unit ={}
 ){
 
     Row(
@@ -214,7 +215,7 @@ fun CartItem(
                 }
 
                 IconButton(
-                    onClick = {}
+                    onClick = {DeleteItem()}
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
@@ -251,11 +252,4 @@ fun CartItem(
 
     }
 
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun CartScreenPreview(){
 }

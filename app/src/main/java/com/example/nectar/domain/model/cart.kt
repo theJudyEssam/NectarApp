@@ -14,7 +14,7 @@ data class cart (
 
 fun cart.toEntity(): CartItem {
     return CartItem(
-        cartId =cartId,
+        cartId = cartId,
         quantity = quantity,
         productId = productId,
         product = product.toEntity()

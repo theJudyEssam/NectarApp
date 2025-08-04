@@ -27,7 +27,7 @@ class CartLocalRepository
         return cartItem
     }
 
-    override suspend fun emptyCart() {
+    override suspend fun emptyCart() { // for emptying out the cart database
         cartDao.emptyCart()
     }
 

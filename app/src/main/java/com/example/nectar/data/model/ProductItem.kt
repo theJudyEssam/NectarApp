@@ -9,15 +9,15 @@ import com.example.nectar.domain.model.product
 @Entity(tableName = "Products")
 data class ProductItem (
     @PrimaryKey (autoGenerate = true)
-    var Id: Int = 0,
+    val Id: Int = 0,
     val productName: String,
     val productWeight: String,
-    var productImg: String,
-    var productPrice: Float,
-    var productDescription: String,
-    var productCategory: String,
-    var productRating: Int,
-    var productNutrition: Nutrition
+    val productImg: String,
+    val productPrice: Float,
+    val productDescription: String,
+    val productCategory: String,
+    val productRating: Int,
+    val productNutrition: Nutrition
 )
 
 fun ProductItem.toDomain(): product {
@@ -33,8 +33,6 @@ fun ProductItem.toDomain(): product {
         productRating = productRating
     )
 }
-
-
 
 // Nested JSON in the table, representing the nutritions
 data class Nutrition(

@@ -4,15 +4,15 @@ import com.example.nectar.data.model.Nutrition
 import com.example.nectar.data.model.ProductItem
 
 class product(
-    var Id: Int = 0,
-    var productName: String,
-    var productWeight: String,
-    var productImg: String,
-    var productPrice: Float,
-    var productDescription: String,
-    var productCategory: String,
-    var productNutrition: Nutrition,
-    var productRating: Int
+    val Id: Int = 0,
+    val productName: String,
+    val productWeight: String,
+    val productImg: String,
+    val productPrice: Float,
+    val productDescription: String,
+    val productCategory: String,
+    val productNutrition: Nutrition,
+    val productRating: Int
 )
 
 fun product.toEntity(): ProductItem {

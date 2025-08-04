@@ -40,11 +40,15 @@ fun CategoryScreen(
     categoryViewModel: CategoryScreenViewModel= hiltViewModel(),
     cartViewModel: CartViewModel = hiltViewModel()
 ){
+
+
     LaunchedEffect(categoryTitle) {
         categoryViewModel.getProductbyCategory(categoryTitle)
     }
     val products = categoryViewModel.products.collectAsState()
     val cartItemIds by cartViewModel.cartItemIds.collectAsState()
+
+
 
     Scaffold(
         topBar = { CategoryNavBar(categoryTitle = categoryTitle, onBackClick = navigateBack) }
@@ -75,7 +79,7 @@ fun CategoryBody(
         columns = GridCells.Adaptive(150.dp),
         modifier = modifier,
         contentPadding = contentPadding,
-        verticalArrangement = Arrangement.spacedBy(12.dp), // 👈 space between rows
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(products) { product ->
@@ -114,7 +118,7 @@ fun CategoryNavBar(
                 )
             }
         },
-//        actions =  {  // i shall let the filters functionality only in the search screen
+//        actions =  {  // i shall let the filters functionality exist only in the search screen
 //            IconButton(onClick = onFiltersClick) {
 //                Icon(
 //                    imageVector = Icons.Default.Warning,

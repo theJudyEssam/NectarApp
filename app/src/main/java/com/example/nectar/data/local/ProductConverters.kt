@@ -5,6 +5,8 @@ import com.example.nectar.data.model.Nutrition
 import com.example.nectar.data.model.ProductItem
 import com.google.gson.Gson
 
+
+// For adding a Nutrition Obj in the Database
 class ProductConverters {
     @TypeConverter
     fun fromNutrition(nutrition: Nutrition): String{
@@ -17,6 +19,8 @@ class ProductConverters {
     }
 }
 
+
+// For adding a product item in the database.
 class CartConverters{
     @TypeConverter
     fun fromProduct(product: ProductItem): String{

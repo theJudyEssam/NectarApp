@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nectar.domain.model.cart
 import com.example.nectar.domain.model.product
 import com.example.nectar.domain.usecases.DecrementUseCase
+import com.example.nectar.domain.usecases.DeleteCartUseCase
 import com.example.nectar.domain.usecases.EmptyCartUseCase
 import com.example.nectar.domain.usecases.GetCartUseCase
 import com.example.nectar.domain.usecases.GetSpecificCartUseCase
@@ -33,7 +34,8 @@ class CartViewModel @Inject constructor(
     private val IncrementUseCase: IncrementUseCase,
     private val DecrementUseCase: DecrementUseCase,
     private val ObserveCartUseCase: ObserveCartUseCase,
-    private val EmptyCartUseCase: EmptyCartUseCase
+    private val EmptyCartUseCase: EmptyCartUseCase,
+    private val DeleteCartUseCase: DeleteCartUseCase
 ): ViewModel() {
 
     val cart = GetCartUseCase().stateIn(
@@ -48,24 +50,24 @@ class CartViewModel @Inject constructor(
     fun fetchCartItem(id:Int){
         _productId.value = id
     }
-    val cartItemQuantity: StateFlow<Int> = _productId
-        .filterNotNull()
-        .flatMapLatest { id ->
-            ObserveCartUseCase(id)
-                .map { it?.quantity ?: 0 }
-        }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            0
-        )
+val cartItemQuantity: StateFlow<Int> = _productId
+    .filterNotNull()
+    .flatMapLatest { id ->
+        ObserveCartUseCase(id)
+            .map { it?.quantity ?: 0 }
+    }
+    .stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        0
+    )
 
 //    fun observeCartItemQuantity(productId: Int): Flow<Int> {
 //        return ObserveCartUseCase(productId).map { it?.quantity ?: 0 }
 //    }
 
     val cartItemIds = cart.map {
-        items -> items.map {it.productId} }
+            items -> items.map {it.productId} }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
 
@@ -91,6 +93,13 @@ class CartViewModel @Inject constructor(
         viewModelScope.launch {
             EmptyCartUseCase()
         }
+    }
+
+    fun DeleteItem(cart: cart){
+        viewModelScope.launch {
+            DeleteCartUseCase(cart)
+        }
+
     }
 
 

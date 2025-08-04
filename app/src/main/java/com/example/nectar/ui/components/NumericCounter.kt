@@ -37,12 +37,17 @@ fun NumericCounter(
     max: Int = 100
 ) {
     Row(
+
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
+
     ) {
         IconButton(
+
+            // with all fairness, i am not sure why it works when i pass value - 1 as a parameter
+            // and not value, still looking into it
             onClick = { onDecrement(value - 1); Log.d("Decrement Button", "Pressed on decrement $value")},
             enabled = true
         ) {
